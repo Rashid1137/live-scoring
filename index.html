@@ -507,6 +507,12 @@
             </section>
 
             <section class="section" id="matchSection" style="display:none;">
+                
+                <div id="viewerHistoryBtnArea" style="display:none; text-align:center; margin-bottom:15px;">
+                    <button onclick="toggleHistory()" style="background: linear-gradient(to right, #f59e0b, #d97706); border: none; color: white; font-weight: bold; padding: 10px 20px; border-radius: 8px; width: 100%;">📊 पुराने मैचों का रिकॉर्ड देखें</button>
+                    <div id="viewerHistoryContainer" style="display:none; margin-top:15px;"></div>
+                </div>
+
                 <div class="score-summary">
                     <span id="displayBatTeam">Team</span>: <span id="totalRuns">0</span>/<span id="totalWickets">0</span> 
                     <br><small>Over: <span id="currentOver">0.0</span> / <span id="displayMaxOvers">0</span> | Extras: <span id="extrasTotal">0</span> | <span style="color:#D72631; font-weight:bold;">CRR: <span id="crrDisplay">0.00</span></span></small>
@@ -618,27 +624,65 @@
         const isViewer = urlParams.get('mode') === 'viewer';
 
         if(isViewer) {
-            // Customer ke liye sabhi scoring, edit buttons aur menu chhupa dena
+            // VIEWERS KE LIYE PREMIUM STYLISH DARK MODE CSS
             const style = document.createElement('style');
             style.innerHTML = `
-                #scoringZone, #setupSection, #undoBtn, .edit-btn, .swap-btn, #endOverBtn, #startSecondInningsBtn, #rematchBtn, .back-btn-container { display: none !important; }
-                #matchSection { display: block !important; margin-top: 20px; }
-                #homeMenu { display: none !important; }
-                #scoringView { display: block !important; }
+                body { background: #0f172a !important; color: white !important; }
+                #scoringZone, #setupSection, #undoBtn, .edit-btn, .swap-btn, #endOverBtn, #startSecondInningsBtn, #rematchBtn, .back-btn-container, #homeMenu { display: none !important; }
+                #scoringView { display: block !important; padding: 20px 10px; background: transparent; }
+                #matchSection { display: block !important; margin-top: 10px; }
+                #viewerHistoryBtnArea { display: block !important; }
+                
+                h1, h2, h3 { color: #fbbf24 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+                .score-summary { background: rgba(255, 255, 255, 0.1) !important; color: white !important; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
+                .score-summary span { color: #fff !important; }
+                .section { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255,255,255,0.1); color: white; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
+                table th { background: #1e3a8a !important; border-color: rgba(255,255,255,0.2); }
+                table td { border-color: rgba(255,255,255,0.2); color: #e2e8f0; }
+                .strike-label { color: #38bdf8 !important; }
+                #liveBowlerEco, #liveBowlerSpell { color: #cbd5e1 !important; }
+                .highlight { background: rgba(56, 189, 248, 0.2) !important; border-left: 5px solid #38bdf8 !important; }
+                
+                #historyContainer, #fullScoreboard { background: rgba(0, 0, 0, 0.4) !important; color: white !important; border: 1px solid rgba(255,255,255,0.2) !important; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+                #historyContainer *, #fullScoreboard * { color: #f8fafc !important; }
+                .past-score-table { background: rgba(255,255,255,0.05) !important; }
             `;
             document.head.appendChild(style);
 
-            // Firebase se real-time data fetch karna
+            // History Sync For Viewer
+            db.ref('VillagePremierLeague/History').on('value', (snapshot) => {
+                if(snapshot.exists()) {
+                    localStorage.setItem('cricketMatchHistory', JSON.stringify(snapshot.val()));
+                }
+            });
+
+            // Tracking variables for Viewer Animation Logic
+            let prevRuns = -1;
+            let prevWickets = -1;
+            let prevBatTeam = "";
+
+            // Firebase Live Data Sync
             db.ref('VillagePremierLeague/LiveMatch').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
                     match = data.match;
                     teams = data.teams;
                     
-                    document.getElementById('setupSection').style.display = 'none';
-                    document.getElementById('matchSection').style.display = 'block';
-                    document.getElementById('displayMaxOvers').textContent = match.maxOvers;
-                    document.getElementById('currentBowlerDisplay').textContent = match.currentBowler;
+                    let currentBatTeam = match.battingTeam;
+                    let currentRuns = teams[currentBatTeam].runs;
+                    let currentWickets = teams[currentBatTeam].wickets;
+
+                    // Trigger animations for Viewers
+                    if(prevRuns !== -1 && prevBatTeam === currentBatTeam && !match.matchFinished) {
+                        let runDiff = currentRuns - prevRuns;
+                        if(runDiff === 4) triggerAnim(4);
+                        if(runDiff === 6) triggerAnim(6);
+                        if(currentWickets > prevWickets) triggerAnim('W');
+                    }
+                    
+                    prevRuns = currentRuns;
+                    prevWickets = currentWickets;
+                    prevBatTeam = currentBatTeam;
                     
                     if(match.matchFinished) {
                         finishMatch(); 
@@ -647,7 +691,7 @@
                             document.getElementById('targetDiv').style.display = 'block';
                             document.getElementById('targetRuns').textContent = match.target;
                         }
-                        updateUI(true); // Viewer ke phone mein update chalana bina dubara Firebase pe bheje
+                        updateUI(true);
                     }
                 }
             });
@@ -716,7 +760,7 @@
         setupForm('teamForm', 'team-result', 'Bheja Jaa Raha Hai...', 'Badhai Ho! Team Registration Safal Raha.');
 
 
-        // --- SCORING APP LOGIC (Aapka original logic 100% same!) ---
+        // --- SCORING APP LOGIC ---
         let teams = {
             team1: { name: '', players: [], batsmen: [], bowlers: [], runs: 0, wickets: 0, extras: 0 },
             team2: { name: '', players: [], batsmen: [], bowlers: [], runs: 0, wickets: 0, extras: 0 }
@@ -745,7 +789,7 @@
         }
 
         window.onload = () => {
-            if(isViewer) return; // Viewer ko direct load hone dein
+            if(isViewer) return; 
             updateOpenerSelectors();
             let savedLive = localStorage.getItem('liveMatchDataVPL');
             if(savedLive) {
@@ -839,16 +883,21 @@
             };
             history.push(record);
             localStorage.setItem('cricketMatchHistory', JSON.stringify(history));
+            
+            // Send history to Firebase so Viewers can see it!
+            if (typeof isViewer !== 'undefined' && !isViewer && window.db) {
+                db.ref('VillagePremierLeague/History').set(history);
+            }
         }
 
         function toggleHistory() {
-            let container = document.getElementById('historyContainer');
+            let container = document.getElementById(isViewer ? 'viewerHistoryContainer' : 'historyContainer');
             if (container.style.display === 'block') { container.style.display = 'none'; return; }
             let history = JSON.parse(localStorage.getItem('cricketMatchHistory')) || [];
             if (history.length === 0) {
                 container.innerHTML = "<p style='text-align:center; color:#777;'>अभी तक कोई पिछला मैच रिकॉर्ड नहीं है।</p>";
             } else {
-                let html = "<h3 style='color:#05445E; margin-top:0;'>पुराने मैचों का रिकॉर्ड</h3>";
+                let html = `<h3 style='color:${isViewer ? '#fbbf24' : '#05445E'}; margin-top:0;'>पुराने मैचों का रिकॉर्ड</h3>`;
                 let revHistory = history.slice().reverse();
                 revHistory.forEach((m, index) => {
                     let actualIdx = history.length - 1 - index;
@@ -862,7 +911,7 @@
                         <div id="pastScore_${actualIdx}" class="past-score-table">`;
                     if(m.fullData) {
                         [m.fullData.team1, m.fullData.team2].forEach((t, i) => {
-                            html += `<h4 style="margin: 15px 0 5px 0; color:#05445E;">Innings ${i+1}: ${t.name} (${t.runs}/${t.wickets})</h4>
+                            html += `<h4 style="margin: 15px 0 5px 0; color:${isViewer ? '#fbbf24' : '#05445E'};">Innings ${i+1}: ${t.name} (${t.runs}/${t.wickets})</h4>
                                      <table style="width:100%; border-collapse:collapse; text-align:center; margin-bottom:5px;">
                                      <tr style="background:#189AB4; color:white;"><th>खिलाड़ी</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>S/R</th></tr>`;
                             t.batsmen.forEach(b => {
@@ -890,7 +939,9 @@
                     }
                     html += `</div></div>`;
                 });
-                html += `<button onclick="clearHistory()" style="background:#e74c3c; color:white; border:none; width:100%; margin-top:10px; padding:8px; font-size:0.9em; box-shadow:none;">🗑️ सभी रिकॉर्ड डिलीट करें</button>`;
+                if(!isViewer) {
+                    html += `<button onclick="clearHistory()" style="background:#e74c3c; color:white; border:none; width:100%; margin-top:10px; padding:8px; font-size:0.9em; box-shadow:none;">🗑️ सभी रिकॉर्ड डिलीट करें</button>`;
+                }
                 container.innerHTML = html;
             }
             container.style.display = 'block';
@@ -904,6 +955,7 @@
         function clearHistory() {
             if(confirm("क्या आप सच में सारे पुराने मैचों का रिकॉर्ड हमेशा के लिए डिलीट करना चाहते हैं?")) {
                 localStorage.removeItem('cricketMatchHistory');
+                if(window.db) db.ref('VillagePremierLeague/History').set(null); // Also delete from firebase
                 document.getElementById('historyContainer').style.display = 'none';
                 alert("रिकॉर्ड डिलीट हो गया!");
             }
@@ -1020,7 +1072,7 @@
                     let ovs = Math.floor(bw.balls / 6) + "." + (bw.balls % 6);
                     let er = bw.balls > 0 ? (bw.runs / (bw.balls / 6)).toFixed(2) : "0.00";
                     let isCurrent = bw.name === match.currentBowler;
-                    let rowStyle = isCurrent ? 'background:#ffeaa7;' : '';
+                    let rowStyle = isCurrent ? 'background:rgba(255, 234, 167, 0.4);' : '';
                     if(isCurrent) activeBowlerStats = bw;
                     tbodyBowl.innerHTML += `<tr style="${rowStyle}">
                         <td>${bw.name} ${isCurrent?'🎳':''}</td>
@@ -1156,7 +1208,7 @@
         };
 
         function finishMatch() {
-            if(match.matchFinished) return; 
+            if(match.matchFinished && !isViewer) return; 
             match.matchFinished = true; match.isComplete = true;
 
             if (typeof isViewer !== 'undefined' && !isViewer && window.db) {
@@ -1178,19 +1230,19 @@
             const fsb = document.getElementById('fullScoreboard'); fsb.style.display = "block";
             let fsbHTML = `<h3 style="color:#0B6623; text-align:center;">📊 मैच का पूरा स्कोरबोर्ड 📊</h3>`;
             [teams.team1, teams.team2].forEach((team, index) => {
-                fsbHTML += `<div style="background:#fff; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #ccc;">
+                fsbHTML += `<div style="background:rgba(255,255,255,0.9); padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #ccc;">
                     <h4 style="margin: 0 0 10px 0; color:#05445E; font-size:1.2em;">Innings ${index+1}: ${team.name} - ${team.runs}/${team.wickets} <span style="font-size:0.7em; color:#555;">(Extras: ${team.extras})</span></h4>
-                    <div class="table-responsive"><table style="margin-bottom: 15px;"><thead><tr><th>खिलाड़ी</th><th>रन</th><th>बॉल</th><th>4s</th><th>6s</th><th>S/R</th><th>Status</th></tr></thead><tbody>`;
+                    <div class="table-responsive"><table style="margin-bottom: 15px; color:#000;"><thead><tr><th>खिलाड़ी</th><th>रन</th><th>बॉल</th><th>4s</th><th>6s</th><th>S/R</th><th>Status</th></tr></thead><tbody>`;
                 team.batsmen.forEach(b => {
                     let sr = b.balls > 0 ? ((b.runs / b.balls) * 100).toFixed(1) : "0.0"; let displayStatus = b.status === 'Yet to Bat' ? '-' : b.status;
-                    fsbHTML += `<tr><td>${b.name}</td><td>${b.runs}</td><td>${b.balls}</td><td>${b.fours}</td><td>${b.sixes}</td><td>${sr}</td><td>${displayStatus}</td></tr>`;
+                    fsbHTML += `<tr style="color:#000;"><td>${b.name}</td><td>${b.runs}</td><td>${b.balls}</td><td>${b.fours}</td><td>${b.sixes}</td><td>${sr}</td><td>${displayStatus}</td></tr>`;
                 });
                 fsbHTML += `</tbody></table></div><h5 style="margin:0 0 5px 0; color:#d35400;">गेंदबाजी (Bowling)</h5><div class="table-responsive">
-                <table><thead><tr style="background:#d35400;"><th>गेंदबाज</th><th>ओवर</th><th>रन</th><th>विकेट</th><th>E/R</th></tr></thead><tbody>`;
+                <table style="color:#000;"><thead><tr style="background:#d35400;"><th>गेंदबाज</th><th>ओवर</th><th>रन</th><th>विकेट</th><th>E/R</th></tr></thead><tbody>`;
                 team.bowlers.forEach(bw => {
                     if(bw.balls > 0 || bw.runs > 0) {
                         let ovs = Math.floor(bw.balls / 6) + "." + (bw.balls % 6); let er = bw.balls > 0 ? (bw.runs / (bw.balls / 6)).toFixed(2) : "0.00";
-                        fsbHTML += `<tr><td>${bw.name}</td><td>${ovs}</td><td>${bw.runs}</td><td>${bw.wickets}</td><td>${er}</td></tr>`;
+                        fsbHTML += `<tr style="color:#000;"><td>${bw.name}</td><td>${ovs}</td><td>${bw.runs}</td><td>${bw.wickets}</td><td>${er}</td></tr>`;
                     }
                 });
                 fsbHTML += `</tbody></table></div></div>`;
@@ -1203,6 +1255,8 @@
                 document.getElementById('scoringZone').style.display = 'none'; document.getElementById('endOverBtn').style.display = 'none';
                 document.getElementById('liveScorecardSection').style.display = 'none'; document.getElementById('livePlayerStats').style.display = 'none';
                 document.getElementById('downloadPdfBtn').style.display = 'block'; document.getElementById('rematchBtn').style.display = 'block';
+            } else {
+                document.getElementById('liveScorecardSection').style.display = 'none'; document.getElementById('livePlayerStats').style.display = 'none';
             }
         }
 
