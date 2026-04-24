@@ -6,6 +6,10 @@
     <title>Third Empire - Village Premier League</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600;700&family=Mukta:wght@400;600;700&display=swap');
 
@@ -87,7 +91,7 @@
         #teamRegView .header p { font-size: 15px; color: #7f8c8d; font-weight: 500; }
         #teamRegView .section-title { font-family: 'Mukta', sans-serif; font-size: 20px; color: #e65c00; border-bottom: 2px solid #eee; padding-bottom: 5px; margin: 25px 0 15px 0; font-weight: 700; text-align: left;}
         #teamRegView .input-group { margin-bottom: 20px; position: relative; }
-        #teamRegView .input-group i { position: absolute; left: 15px; top: 38px; color: #95a5a5; font-size:16px;}
+        #teamRegView .input-group i { position: absolute; left: 15px; top: 38px; color: #95a5a6; font-size:16px;}
         #teamRegView label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #34495e; text-align:left;}
         #teamRegView input, #teamRegView select, #teamRegView textarea { width: 100%; padding: 12px 12px 12px 45px; background: #f8f9fa; border: 1px solid #ced4da; border-radius: 8px; color: #333; font-size: 15px; transition: all 0.3s ease; box-sizing: border-box;}
         #teamRegView input:focus, #teamRegView select:focus, #teamRegView textarea:focus { outline: none; border-color: #e65c00; background: #fff; box-shadow: 0 0 8px rgba(230, 92, 0, 0.2); }
@@ -144,6 +148,7 @@
         .motm-name { font-size: 1.5em; color: #fff; text-shadow: 1px 1px 2px #000; display: block; margin: 5px 0;}
         .motm-stats { font-size: 0.8em; color: #fff; font-weight: normal;}
 
+        /* OFFLINE PDF GENERATION CSS - DO NOT CHANGE */
         @media print {
             body { background: white; margin: 0; padding: 0; }
             body > * { display: none !important; }
@@ -157,9 +162,6 @@
             h1 { display: block !important; text-align: center; color: #05445E; margin-bottom: 10px; }
         }
     </style>
-
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -172,7 +174,7 @@
             <div class="menu-card scoring" onclick="openView('scoringView')">
                 <i class="fas fa-chart-line"></i>
                 <h3>Match Scoring</h3>
-                <span>Live Real-time Scoreboard</span>
+                <span>Live Offline Scoreboard</span>
             </div>
             
             <div class="menu-card player" onclick="openView('playerRegView')">
@@ -199,6 +201,7 @@
         <div class="back-btn-container">
             <button class="back-btn" onclick="openView('homeMenu')"><i class="fas fa-arrow-left"></i> Home Menu</button>
         </div>
+        
         <div class="registration-card">
             <div class="header">
                 <h2><i class="fas fa-user-edit"></i> Player Registration</h2>
@@ -206,14 +209,57 @@
             </div>
             <form id="playerForm">
                 <input type="hidden" name="access_key" value="50bf72b1-ae10-4338-8d64-97d5319300e8">
-                <div class="input-group"><label>Full Name</label><i class="fas fa-user"></i><input type="text" name="Full_Name" required placeholder="Jaise: Rashid Hussain"></div>
-                <div class="input-group"><label>Mobile Number</label><i class="fas fa-phone-alt"></i><input type="tel" name="Mobile_Number" required placeholder="10-digit mobile number"></div>
-                <div class="input-group"><label>Full Address</label><i class="fas fa-map-marker-alt" style="top: 35px;"></i><textarea name="Address" rows="2" required placeholder="Jaise: Birpur Than, Moradabad..."></textarea></div>
-                <div style="display: flex; gap: 15px;">
-                    <div class="input-group" style="flex: 1;"><label>Batting Style</label><i class="fas fa-baseball-bat-ball"></i><select name="Batting_Style" required><option value="" disabled selected>Select...</option><option value="Right-Handed">Right-Handed</option><option value="Left-Handed">Left-Handed</option></select></div>
-                    <div class="input-group" style="flex: 1;"><label>Bowling Style</label><i class="fas fa-bowling-ball"></i><select name="Bowling_Style" required><option value="" disabled selected>Select...</option><option value="Right-Arm Medium">Right-Arm Medium</option><option value="Right-Arm Fast">Right-Arm Fast</option><option value="Right-Arm Spin">Right-Arm Spin</option><option value="Left-Arm Fast">Left-Arm Fast</option><option value="Left-Arm Spin">Left-Arm Spin</option><option value="Wicket-Keeper">Wicket-Keeper</option></select></div>
+                <input type="hidden" name="subject" value="New Cricket Player Registered!">
+
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="Full_Name" required placeholder="Jaise: Rashid Hussain">
                 </div>
-                <div class="input-group"><label>Primary Role</label><i class="fas fa-star"></i><select name="Primary_Role" required><option value="" disabled selected>Aapka main role kya hai?</option><option value="Batsman">Batsman</option><option value="Bowler">Bowler</option><option value="All-Rounder">All-Rounder</option></select></div>
+                <div class="input-group">
+                    <label>Mobile Number</label>
+                    <i class="fas fa-phone-alt"></i>
+                    <input type="tel" name="Mobile_Number" required placeholder="10-digit mobile number">
+                </div>
+                <div class="input-group">
+                    <label>Full Address</label>
+                    <i class="fas fa-map-marker-alt" style="top: 35px;"></i>
+                    <textarea name="Address" rows="2" required placeholder="Jaise: Birpur Than, Moradabad..."></textarea>
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Batting Style</label>
+                        <i class="fas fa-baseball-bat-ball"></i>
+                        <select name="Batting_Style" required>
+                            <option value="" disabled selected>Select...</option>
+                            <option value="Right-Handed">Right-Handed</option>
+                            <option value="Left-Handed">Left-Handed</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label>Bowling Style</label>
+                        <i class="fas fa-bowling-ball"></i>
+                        <select name="Bowling_Style" required>
+                            <option value="" disabled selected>Select...</option>
+                            <option value="Right-Arm Medium">Right-Arm Medium</option>
+                            <option value="Right-Arm Fast">Right-Arm Fast</option>
+                            <option value="Right-Arm Spin">Right-Arm Spin</option>
+                            <option value="Left-Arm Fast">Left-Arm Fast</option>
+                            <option value="Left-Arm Spin">Left-Arm Spin</option>
+                            <option value="Wicket-Keeper">Wicket-Keeper</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Primary Role</label>
+                    <i class="fas fa-star"></i>
+                    <select name="Primary_Role" required>
+                        <option value="" disabled selected>Aapka main role kya hai?</option>
+                        <option value="Batsman">Batsman</option>
+                        <option value="Bowler">Bowler</option>
+                        <option value="All-Rounder">All-Rounder</option>
+                    </select>
+                </div>
                 <button type="submit" class="submit-btn">Register Player <i class="fas fa-paper-plane"></i></button>
                 <div id="player-result" class="result-message"></div>
             </form>
@@ -224,14 +270,63 @@
         <div class="back-btn-container">
             <button class="back-btn" onclick="openView('homeMenu')"><i class="fas fa-arrow-left"></i> Home Menu</button>
         </div>
+
         <div class="vip-card">
-            <div class="header"><i class="fas fa-crown"></i><h2>Team Owner Registration</h2><p>Apni Franchise Book Karne Ke Liye Form Bharein</p></div>
+            <div class="header">
+                <i class="fas fa-crown"></i>
+                <h2>Team Owner Registration</h2>
+                <p>Apni Franchise Book Karne Ke Liye Form Bharein</p>
+            </div>
             <form id="ownerForm">
                 <input type="hidden" name="access_key" value="9ddd9f61-895f-421d-9cb7-bdee930912de">
-                <div class="input-group"><label>Owner Full Name</label><i class="fas fa-user-tie"></i><input type="text" name="Owner_Name" required placeholder="Aapka pura naam"></div>
-                <div class="row"><div class="input-group col"><label>Mobile Number</label><i class="fas fa-phone-alt"></i><input type="tel" name="Mobile_Number" required placeholder="10-digit number" pattern="[0-9]{10}"></div><div class="input-group col"><label>Email Address</label><i class="fas fa-envelope"></i><input type="email" name="Email" placeholder="Email id dalein"></div></div>
-                <div class="input-group"><label>Full Address</label><i class="fas fa-map-marker-alt" style="top: 38px;"></i><textarea name="Address" rows="2" required placeholder="Gaon / Shahar aur Pincode"></textarea></div>
-                <div class="row"><div class="input-group col"><label>Desired Team Name</label><i class="fas fa-shield-alt"></i><input type="text" name="Desired_Team_Name" required placeholder="Jaise: Birpur Fighters"></div><div class="input-group col"><label>Budget</label><i class="fas fa-coins"></i><select name="Investment_Budget" required><option value="" disabled selected>Select Budget...</option><option value="₹5k-₹10k">₹5,000 - ₹10,000</option><option value="₹10k+">₹10,000+</option></select></div></div>
+                <input type="hidden" name="subject" value="👑 NEW TEAM OWNER REGISTRATION!">
+                <input type="hidden" name="from_name" value="Tournament Admin">
+
+                <div class="input-group">
+                    <label>Owner Full Name</label>
+                    <i class="fas fa-user-tie"></i>
+                    <input type="text" name="Owner_Name" required placeholder="Aapka pura naam">
+                </div>
+                <div class="row">
+                    <div class="input-group col">
+                        <label>Mobile Number</label>
+                        <i class="fas fa-phone-alt"></i>
+                        <input type="tel" name="Mobile_Number" required placeholder="10-digit number" pattern="[0-9]{10}">
+                    </div>
+                    <div class="input-group col">
+                        <label>Email Address (Optional)</label>
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="Email" placeholder="Email id dalein">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Full Address</label>
+                    <i class="fas fa-map-marker-alt" style="top: 38px;"></i>
+                    <textarea name="Address" rows="2" required placeholder="Gaon / Shahar aur Pincode"></textarea>
+                </div>
+                <div class="row">
+                    <div class="input-group col">
+                        <label>Desired Team Name</label>
+                        <i class="fas fa-shield-alt"></i>
+                        <input type="text" name="Desired_Team_Name" required placeholder="Jaise: Birpur Fighters">
+                    </div>
+                    <div class="input-group col">
+                        <label>Investment Budget</label>
+                        <i class="fas fa-coins"></i>
+                        <select name="Investment_Budget" required>
+                            <option value="" disabled selected>Select Budget...</option>
+                            <option value="₹5,000 - ₹10,000">₹5,000 - ₹10,000</option>
+                            <option value="₹10,000 - ₹20,000">₹10,000 - ₹20,000</option>
+                            <option value="₹20,000 - ₹50,000">₹20,000 - ₹50,000</option>
+                            <option value="₹50,000+">₹50,000+</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Previous Cricket Experience?</label>
+                    <i class="fas fa-history" style="top: 38px;"></i>
+                    <textarea name="Experience" rows="2" placeholder="Kya aapne pehle koi team chalayi hai? (Optional)"></textarea>
+                </div>
                 <button type="submit" class="submit-btn">Submit Proposal <i class="fas fa-arrow-right"></i></button>
                 <div id="owner-result" class="result-message"></div>
             </form>
@@ -242,13 +337,104 @@
         <div class="back-btn-container">
             <button class="back-btn" onclick="openView('homeMenu')"><i class="fas fa-arrow-left"></i> Home Menu</button>
         </div>
+
         <div class="village-card">
-            <div class="header"><i class="fas fa-users"></i><h2>गाँव की टीम का रजिस्ट्रेशन</h2><p>Register Your Village Team</p></div>
+            <div class="header">
+                <i class="fas fa-users"></i>
+                <h2>गाँव की टीम का रजिस्ट्रेशन</h2>
+                <p>Apne Gaon Ki Team Ko Tournament Mein Register Karein</p>
+            </div>
             <form id="teamForm">
                 <input type="hidden" name="access_key" value="27aa2337-2ebf-4386-8e95-1704fbda0f78">
+                <input type="hidden" name="subject" value="🏏 NEW VILLAGE TEAM REGISTRATION!">
+                <input type="hidden" name="from_name" value="Tournament Admin">
+
                 <div class="section-title">Gaon & Team Ki Details</div>
-                <div class="row"><div class="input-group col"><label>Team Name</label><i class="fas fa-shield-alt"></i><input type="text" name="Team_Name" required></div><div class="input-group col"><label>Village Name</label><i class="fas fa-home"></i><input type="text" name="Village_Name" required></div></div>
-                <div class="input-group"><label>Address</label><i class="fas fa-map-marked-alt" style="top: 38px;"></i><textarea name="Village_Address" rows="2" required></textarea></div>
+                <div class="row">
+                    <div class="input-group col">
+                        <label>Team Name (टीम का नाम)</label>
+                        <i class="fas fa-shield-alt"></i>
+                        <input type="text" name="Team_Name" required placeholder="Jaise: Birpur Super Kings">
+                    </div>
+                    <div class="input-group col">
+                        <label>Village Name (गाँव का नाम)</label>
+                        <i class="fas fa-home"></i>
+                        <input type="text" name="Village_Name" required placeholder="Aapke Gaon ka naam">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Full Address (पूरा पता)</label>
+                    <i class="fas fa-map-marked-alt" style="top: 38px;"></i>
+                    <textarea name="Village_Address" rows="2" required placeholder="Gaon, Post, Thana, District, Pincode"></textarea>
+                </div>
+
+                <div class="section-title">Owner & Captain Details</div>
+                <div class="row">
+                    <div class="input-group col">
+                        <label>Owner Name (मालिक)</label>
+                        <i class="fas fa-user-tie"></i>
+                        <input type="text" name="Owner_Name" required placeholder="Owner ka naam">
+                    </div>
+                    <div class="input-group col">
+                        <label>Owner Phone</label>
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" name="Owner_Phone" required placeholder="10-digit number" pattern="[0-9]{10}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group col">
+                        <label>Captain Name (कप्तान)</label>
+                        <i class="fas fa-user-shield"></i>
+                        <input type="text" name="Captain_Name" required placeholder="Captain ka naam">
+                    </div>
+                    <div class="input-group col">
+                        <label>Captain Phone</label>
+                        <i class="fas fa-mobile-alt"></i>
+                        <input type="tel" name="Captain_Phone" required placeholder="10-digit number" pattern="[0-9]{10}">
+                    </div>
+                </div>
+
+                <div class="section-title">Team Players (16 खिलाड़ियों के नाम)</div>
+                <p class="instruction-text">Pehle 11 khiladiyon ke naam daalna zaroori hai. Baaki 5 extra khiladi (optional) hain.</p>
+                <div class="player-row">
+                    <div class="input-group player-col"><label>Player 1</label><i class="fas fa-user"></i><input type="text" name="Player_1" required placeholder="Khiladi 1"></div>
+                    <div class="input-group player-col"><label>Player 2</label><i class="fas fa-user"></i><input type="text" name="Player_2" required placeholder="Khiladi 2"></div>
+                </div>
+                <div class="player-row">
+                    <div class="input-group player-col"><label>Player 3</label><i class="fas fa-user"></i><input type="text" name="Player_3" required placeholder="Khiladi 3"></div>
+                    <div class="input-group player-col"><label>Player 4</label><i class="fas fa-user"></i><input type="text" name="Player_4" required placeholder="Khiladi 4"></div>
+                </div>
+                <div class="player-row">
+                    <div class="input-group player-col"><label>Player 5</label><i class="fas fa-user"></i><input type="text" name="Player_5" required placeholder="Khiladi 5"></div>
+                    <div class="input-group player-col"><label>Player 6</label><i class="fas fa-user"></i><input type="text" name="Player_6" required placeholder="Khiladi 6"></div>
+                </div>
+                <div class="player-row">
+                    <div class="input-group player-col"><label>Player 7</label><i class="fas fa-user"></i><input type="text" name="Player_7" required placeholder="Khiladi 7"></div>
+                    <div class="input-group player-col"><label>Player 8</label><i class="fas fa-user"></i><input type="text" name="Player_8" required placeholder="Khiladi 8"></div>
+                </div>
+                <div class="player-row">
+                    <div class="input-group player-col"><label>Player 9</label><i class="fas fa-user"></i><input type="text" name="Player_9" required placeholder="Khiladi 9"></div>
+                    <div class="input-group player-col"><label>Player 10</label><i class="fas fa-user"></i><input type="text" name="Player_10" required placeholder="Khiladi 10"></div>
+                </div>
+                <div class="player-row">
+                    <div class="input-group player-col"><label>Player 11</label><i class="fas fa-user"></i><input type="text" name="Player_11" required placeholder="Khiladi 11"></div>
+                    <div class="input-group player-col"><label>Player 12 (Extra)</label><i class="fas fa-user" style="color:#adb5bd;"></i><input type="text" name="Player_12" placeholder="Khiladi 12"></div>
+                </div>
+                <div class="player-row">
+                    <div class="input-group player-col"><label>Player 13 (Extra)</label><i class="fas fa-user" style="color:#adb5bd;"></i><input type="text" name="Player_13" placeholder="Khiladi 13"></div>
+                    <div class="input-group player-col"><label>Player 14 (Extra)</label><i class="fas fa-user" style="color:#adb5bd;"></i><input type="text" name="Player_14" placeholder="Khiladi 14"></div>
+                </div>
+                <div class="player-row">
+                    <div class="input-group player-col"><label>Player 15 (Extra)</label><i class="fas fa-user" style="color:#adb5bd;"></i><input type="text" name="Player_15" placeholder="Khiladi 15"></div>
+                    <div class="input-group player-col"><label>Player 16 (Extra)</label><i class="fas fa-user" style="color:#adb5bd;"></i><input type="text" name="Player_16" placeholder="Khiladi 16"></div>
+                </div>
+
+                <div class="section-title">Other Info</div>
+                <div class="input-group">
+                    <label>Team Jersey Color (Optional)</label>
+                    <i class="fas fa-tshirt"></i>
+                    <input type="text" name="Jersey_Color" placeholder="Jaise: Blue, Red, Yellow">
+                </div>
                 <button type="submit" class="submit-btn">Team Register Karein <i class="fas fa-paper-plane"></i></button>
                 <div id="team-result" class="result-message"></div>
             </form>
@@ -257,7 +443,7 @@
 
     <div id="scoringView" class="view-section">
         <div class="back-btn-container" style="position:relative; margin-bottom:10px; padding:0;">
-            <button class="back-btn" id="homeBtnScoring" onclick="openView('homeMenu')" style="background:#05445E;"><i class="fas fa-arrow-left"></i> Home Menu</button>
+            <button class="back-btn" onclick="openView('homeMenu')" style="background:#05445E;"><i class="fas fa-arrow-left"></i> Home Menu</button>
         </div>
 
         <div class="scoring-container">
@@ -270,67 +456,145 @@
                     <h3 style="margin: 5px 0 0 0; color: #05445E;">Rashid Hussain</h3>
                 </div>
 
-                <button id="showHistoryBtn" onclick="toggleHistory()" style="background:#f39c12; width:100%; margin-bottom: 15px;">📊 रिकॉर्ड देखें</button>
+                <button id="showHistoryBtn" onclick="toggleHistory()" style="background:#f39c12; width:100%; margin-bottom: 15px; box-shadow: none;">📊 पिछले मैचों का रिकॉर्ड देखें</button>
                 <div id="historyContainer" style="display:none; margin-bottom:15px; background:#fff; padding:15px; border-radius:8px; border: 2px solid #f39c12;"></div>
 
                 <h2>मैच सेटअप (Setup)</h2>
-                <div class="section" style="background: #eef9fa; margin-bottom: 20px;">
-                    <label>कुल ओवर:</label><input type="number" id="totalOversInput" value="5" min="1" />
-                </div>
-                <div class="flex-row">
-                    <div class="flex50"><label>Team 1:</label><input type="text" id="team1Name" value="Team Alpha" /><textarea id="team1Players" rows="3" onchange="updateOpenerSelectors()">A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11</textarea></div>
-                    <div class="flex50"><label>Team 2:</label><input type="text" id="team2Name" value="Team Bravo" /><textarea id="team2Players" rows="3" onchange="updateOpenerSelectors()">B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11</textarea></div>
-                </div>
-                <div class="section" style="background: #f9f9f9;">
+                
+                <div class="section" style="background: #eef9fa; margin-top: 0; margin-bottom: 20px;">
                     <div class="flex-row">
-                        <div class="flex50"><label>Striker:</label><select id="selectStriker"></select></div>
-                        <div class="flex50"><label>Non-Striker:</label><select id="selectNonStriker"></select></div>
-                        <div class="flex50"><label>First Bowler:</label><select id="selectFirstBowler"></select></div>
+                        <div class="flex50">
+                            <label for="totalOversInput">कुल ओवर (Total Overs):</label>
+                            <input type="number" id="totalOversInput" value="5" min="1" />
+                        </div>
                     </div>
                 </div>
-                <button id="setupMatchBtn" style="width:100%; margin-top:15px;">मैच शुरू करें</button>
+
+                <div class="flex-row">
+                    <div class="flex50">
+                        <label>टीम 1 (Team 1):</label>
+                        <input type="text" id="team1Name" value="Team Alpha" />
+                        <label>खिलाड़ियों के नाम (Comma separated):</label>
+                        <textarea id="team1Players" rows="3" onchange="updateOpenerSelectors()">A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11</textarea>
+                    </div>
+                    <div class="flex50">
+                        <label>टीम 2 (Team 2):</label>
+                        <input type="text" id="team2Name" value="Team Bravo" />
+                        <label>खिलाड़ियों के नाम (Comma separated):</label>
+                        <textarea id="team2Players" rows="3" onchange="updateOpenerSelectors()">B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11</textarea>
+                    </div>
+                </div>
+
+                <div class="section" style="background: #f9f9f9;">
+                    <h3>ओपनिंग खिलाड़ी चुनें</h3>
+                    <div class="flex-row">
+                        <div class="flex50">
+                            <label>स्ट्राइकर (Striker):</label>
+                            <select id="selectStriker"></select>
+                        </div>
+                        <div class="flex50">
+                            <label>नॉन-स्ट्राइकर (Non-Striker):</label>
+                            <select id="selectNonStriker"></select>
+                        </div>
+                        <div class="flex50" style="margin-top:10px;">
+                            <label>पहला गेंदबाज (First Bowler):</label>
+                            <select id="selectFirstBowler"></select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="setupMatchBtn" style="width:100%; margin-top:15px;">मैच शुरू करें (Start Match)</button>
             </section>
 
             <section class="section" id="matchSection" style="display:none;">
                 <div class="score-summary">
                     <span id="displayBatTeam">Team</span>: <span id="totalRuns">0</span>/<span id="totalWickets">0</span> 
-                    <br><small>Over: <span id="currentOver">0.0</span> / <span id="displayMaxOvers">0</span> | Extras: <span id="extrasTotal">0</span> | CRR: <span id="crrDisplay">0.00</span></small>
+                    <br><small>Over: <span id="currentOver">0.0</span> / <span id="displayMaxOvers">0</span> | Extras: <span id="extrasTotal">0</span> | <span style="color:#D72631; font-weight:bold;">CRR: <span id="crrDisplay">0.00</span></span></small>
                 </div>
-                <div id="targetDiv" style="display:none;">Target: <span id="targetRuns">0</span></div>
+                
+                <div id="targetDiv" style="display:none;">लक्ष्य (Target): <span id="targetRuns">0</span></div>
 
                 <div class="flex-row section" id="livePlayerStats" style="margin-top:0;">
                     <div class="flex50">
-                        <div><span class="strike-label">🏏 Striker:</span> <span id="strikerName"></span> <button class="edit-btn" onclick="openSelectorModal('changeStriker')">बदलें</button></div>
-                        <div><span class="strike-label">🏃 Non-Striker:</span> <span id="nonStrikerName"></span> <button class="edit-btn" onclick="openSelectorModal('changeNonStriker')">बदलें</button></div>
-                        <button class="swap-btn" onclick="manualSwitchStrike()">Swap ⇄</button>
+                        <div style="margin-bottom: 8px;">
+                            <span class="strike-label">🏏 Striker:</span> <span id="strikerName"></span>
+                            <button class="edit-btn" onclick="openSelectorModal('changeStriker')">बदलें</button>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <span class="strike-label">🏃 Non-Striker:</span> <span id="nonStrikerName"></span>
+                            <button class="edit-btn" onclick="openSelectorModal('changeNonStriker')">बदलें</button>
+                        </div>
+                        <button class="swap-btn" onclick="manualSwitchStrike()" style="margin-top:5px;">Swap Strike ⇄</button>
                     </div>
                     <div class="flex50">
-                        <label>Bowler:</label><div style="font-size: 1.2em; font-weight: bold; color: #D72631;"><span id="currentBowlerDisplay"></span> <button class="edit-btn" onclick="openSelectorModal('nextBowler')">बदलें</button></div>
-                        <div style="font-size: 0.8em;">Spell: <span id="liveBowlerSpell">0.0-0-0</span> | E/R: <span id="liveBowlerEco">0.00</span></div>
+                        <label>वर्तमान गेंदबाज (Bowler):</label>
+                        <div style="font-size: 1.2em; font-weight: bold; color: #D72631;">
+                            <span id="currentBowlerDisplay"></span>
+                            <button class="edit-btn" onclick="openSelectorModal('nextBowler')">बदलें</button>
+                        </div>
+                        <div style="font-size: 0.8em; color: #05445E; margin-top: 5px;">
+                            स्पेल: <span id="liveBowlerSpell">0.0-0-0</span> | E/R: <span id="liveBowlerEco">0.00</span>
+                        </div>
                     </div>
                 </div>
 
-                <div style="text-align: right; margin-top: 15px;"><button id="undoBtn" onclick="undoLastAction()" style="background:#e74c3c;" disabled>↩ Undo</button></div>
-
-                <div class="section" id="scoringZone" style="text-align:center; margin-top:5px;">
-                    <button class="ballRunBtn" data-run="0">0</button><button class="ballRunBtn" data-run="1">1</button><button class="ballRunBtn" data-run="2">2</button><button class="ballRunBtn" data-run="3">3</button><button class="ballRunBtn" data-run="4" style="background:#05445E;">4</button><button class="ballRunBtn" data-run="6" style="background:#05445E;">6</button><br>
-                    <button id="wideBtn" class="extraBtn" style="background:#f39c12;">Wide</button><button id="noBallBtn" class="extraBtn" style="background:#f39c12;">NB</button><button id="byeLbBtn" class="extraBtn" style="background:#8e44ad;">Bye/LB</button><button id="wicketBtn" style="background:#D72631;">Wicket Out!</button>
+                <div style="text-align: right; margin-top: 15px;">
+                    <button id="undoBtn" onclick="undoLastAction()" style="background:#e74c3c; padding: 8px 15px; font-size: 0.9em; box-shadow:none; border-radius:4px;" disabled>↩ Undo (गलती सुधारें)</button>
                 </div>
 
-                <div style="text-align: center; margin-top:10px;"><button id="endOverBtn" disabled>End Over</button><button id="startSecondInningsBtn" style="display:none; background:#0B6623;">Start 2nd Innings</button></div>
+                <div class="section" id="scoringZone" style="text-align:center; margin-top:5px;">
+                    <h3>Run Buttons</h3>
+                    <button class="ballRunBtn" data-run="0">0</button>
+                    <button class="ballRunBtn" data-run="1">1</button>
+                    <button class="ballRunBtn" data-run="2">2</button>
+                    <button class="ballRunBtn" data-run="3">3</button>
+                    <button class="ballRunBtn" data-run="4" style="background:#05445E;">4</button>
+                    <button class="ballRunBtn" data-run="6" style="background:#05445E;">6</button>
+                    <br>
+                    <button id="wideBtn" class="extraBtn" style="background:#f39c12;">Wide</button>
+                    <button id="noBallBtn" class="extraBtn" style="background:#f39c12;">No Ball</button>
+                    <button id="byeLbBtn" class="extraBtn" style="background:#8e44ad;">Bye / LB</button>
+                    <button id="wicketBtn" style="background:#D72631;">Wicket Out!</button>
+                </div>
+
+                <div style="text-align: center; margin-top:10px;">
+                    <button id="endOverBtn" disabled>ओवर समाप्त (End Over)</button>
+                    <button id="startSecondInningsBtn" style="display:none; background:#0B6623;">दूसरी पारी शुरू करें</button>
+                </div>
 
                 <section class="section" id="liveScorecardSection">
-                    <h3>Batting Scorecard</h3><div class="table-responsive"><table id="battingScorecard"><thead><tr><th>Player</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>S/R</th><th>Status</th></tr></thead><tbody></tbody></table></div>
-                    <h3 style="margin-top:20px;">Bowling Scorecard</h3><div class="table-responsive"><table id="bowlingScorecard"><thead><tr><th>Bowler</th><th>Ov</th><th>R</th><th>W</th><th>E/R</th></tr></thead><tbody></tbody></table></div>
+                    <h3>स्कोरकार्ड (Batting)</h3>
+                    <div class="table-responsive">
+                        <table id="battingScorecard">
+                            <thead><tr><th>खिलाड़ी</th><th>रन</th><th>बॉल</th><th>4s</th><th>6s</th><th>S/R</th><th>Status</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    
+                    <h3 style="margin-top:20px;">स्कोरकार्ड (Bowling)</h3>
+                    <div class="table-responsive">
+                        <table id="bowlingScorecard">
+                            <thead><tr><th>गेंदबाज</th><th>ओवर</th><th>रन</th><th>विकेट</th><th>E/R</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </section>
 
                 <div id="resultText"></div>
                 <div id="motmContainer"></div> <div id="fullScoreboard"></div>
-                <button id="downloadPdfBtn" onclick="downloadScoreboardPDF()" style="display:none; width:100%; background:#d35400; margin-top:20px;">📄 Save PDF</button>
-                <button id="rematchBtn" onclick="startNewMatchClear()" style="display:none; width:100%; background:#05445E; margin-top:10px;">🔄 New Match</button>
+                
+                <button id="downloadPdfBtn" onclick="downloadScoreboardPDF()" style="display:none; width:100%; background:#d35400; margin-top:20px; font-size:1.2em;">📄 स्कोरबोर्ड PDF सेव करें (Print)</button>
+                <button id="rematchBtn" onclick="startNewMatchClear()" style="display:none; width:100%; background:#05445E; margin-top:10px; font-size:1.2em;">🔄 नया मैच शुरू करें (Rematch)</button>
             </section>
 
-            <div id="customModal" class="modal"><div class="modal-content"><h3 id="modalTitle">Title</h3><div id="modalBody"></div><button id="modalSubmitBtn" style="width:100%;">Confirm</button><button onclick="document.getElementById('customModal').style.display='none'" style="width:100%; background:#95a5a6; margin-top: 5px;">Cancel</button></div></div>
+            <div id="customModal" class="modal">
+                <div class="modal-content">
+                    <h3 id="modalTitle" style="margin-top:0; color:#05445E; text-align:center;">Title</h3>
+                    <div id="modalBody"></div>
+                    <button id="modalSubmitBtn" style="width:100%; background:#189AB4; margin-top: 10px;">कन्फर्म करें (Confirm)</button>
+                    <button onclick="document.getElementById('customModal').style.display='none'" style="width:100%; background:#95a5a6; margin-top: 5px; box-shadow:none;">रद्द करें (Cancel)</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -347,28 +611,44 @@
             appId: "1:980375953845:web:582e6064b0153a975b39fc"
         };
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        window.db = firebase.database();
 
-        // --- VIEWER MODE CHECK ---
+        // Customer ya Admin check karne ka logic
         const urlParams = new URLSearchParams(window.location.search);
         const isViewer = urlParams.get('mode') === 'viewer';
 
         if(isViewer) {
-            const viewerStyles = document.createElement('style');
-            viewerStyles.innerHTML = `
-                #scoringZone, #setupSection, #undoBtn, .edit-btn, .swap-btn, #endOverBtn, #startSecondInningsBtn, #rematchBtn, #homeBtnScoring { display: none !important; }
+            // Customer ke liye sabhi scoring, edit buttons aur menu chhupa dena
+            const style = document.createElement('style');
+            style.innerHTML = `
+                #scoringZone, #setupSection, #undoBtn, .edit-btn, .swap-btn, #endOverBtn, #startSecondInningsBtn, #rematchBtn, .back-btn-container { display: none !important; }
                 #matchSection { display: block !important; margin-top: 20px; }
+                #homeMenu { display: none !important; }
+                #scoringView { display: block !important; }
             `;
-            document.head.appendChild(viewerStyles);
+            document.head.appendChild(style);
 
-            // Listen for changes from Firebase in real-time
+            // Firebase se real-time data fetch karna
             db.ref('VillagePremierLeague/LiveMatch').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
                     match = data.match;
                     teams = data.teams;
-                    if(match.matchFinished) { finishMatchViewer(); } 
-                    else { document.getElementById('matchSection').style.display = 'block'; updateUI(true); }
+                    
+                    document.getElementById('setupSection').style.display = 'none';
+                    document.getElementById('matchSection').style.display = 'block';
+                    document.getElementById('displayMaxOvers').textContent = match.maxOvers;
+                    document.getElementById('currentBowlerDisplay').textContent = match.currentBowler;
+                    
+                    if(match.matchFinished) {
+                        finishMatch(); 
+                    } else {
+                        if(match.innings === 2) {
+                            document.getElementById('targetDiv').style.display = 'block';
+                            document.getElementById('targetRuns').textContent = match.target;
+                        }
+                        updateUI(true); // Viewer ke phone mein update chalana bina dubara Firebase pe bheje
+                    }
                 }
             });
         }
@@ -378,11 +658,65 @@
             document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
             const target = document.getElementById(viewId);
             target.style.display = (viewId === 'homeMenu') ? 'flex' : 'block';
-            if(viewId !== 'homeMenu' && viewId !== 'scoringView') target.style.display = 'flex';
+            if(viewId !== 'homeMenu' && viewId !== 'scoringView') target.style.display = 'flex'; // Forms use flex
             window.scrollTo(0, 0);
         }
 
-        // --- SCORING APP LOGIC ---
+        // --- WEB3FORMS SUBMISSION LOGIC ---
+        function setupForm(formId, resultId, loadingText, successText) {
+            const form = document.getElementById(formId);
+            const result = document.getElementById(resultId);
+
+            if(form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = `${loadingText} <i class="fas fa-spinner fa-spin"></i>`;
+                    submitBtn.disabled = true;
+
+                    const formData = new FormData(form);
+                    const object = Object.fromEntries(formData);
+                    const json = JSON.stringify(object);
+                    
+                    result.style.display = "none";
+
+                    fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: json
+                    })
+                    .then(async (response) => {
+                        let json = await response.json();
+                        if (response.status == 200) {
+                            result.innerHTML = `<i class='fas fa-check-circle'></i> ${successText}`;
+                            result.className = "result-message msg-success";
+                            form.reset();
+                        } else {
+                            result.innerHTML = "<i class='fas fa-exclamation-circle'></i> " + json.message;
+                            result.className = "result-message msg-error";
+                        }
+                    })
+                    .catch(error => {
+                        result.innerHTML = "<i class='fas fa-exclamation-triangle'></i> Something went wrong! Please try again.";
+                        result.className = "result-message msg-error";
+                    })
+                    .then(function() {
+                        result.style.display = "block";
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.disabled = false;
+                        setTimeout(() => { result.style.display = "none"; }, 6000);
+                    });
+                });
+            }
+        }
+
+        setupForm('playerForm', 'player-result', 'Submitting...', 'Registration Successful!');
+        setupForm('ownerForm', 'owner-result', 'Sending...', 'Registration Successful! Hum jald sampark karenge.');
+        setupForm('teamForm', 'team-result', 'Bheja Jaa Raha Hai...', 'Badhai Ho! Team Registration Safal Raha.');
+
+
+        // --- SCORING APP LOGIC (Aapka original logic 100% same!) ---
         let teams = {
             team1: { name: '', players: [], batsmen: [], bowlers: [], runs: 0, wickets: 0, extras: 0 },
             team2: { name: '', players: [], batsmen: [], bowlers: [], runs: 0, wickets: 0, extras: 0 }
@@ -398,140 +732,112 @@
 
         function saveLiveMatch() {
             localStorage.setItem('liveMatchDataVPL', JSON.stringify({match: match, teams: teams, historyStack: historyStack}));
-            // Update Firebase
-            if(!isViewer) {
-                db.ref('VillagePremierLeague/LiveMatch').set({ match: match, teams: teams });
+            
+            // Firebase par data upload karna (sirf admin ke liye)
+            if (typeof isViewer !== 'undefined' && !isViewer && window.db) {
+                db.ref('VillagePremierLeague/LiveMatch').set({match: match, teams: teams});
             }
         }
 
-        function startNewMatchClear() { localStorage.removeItem('liveMatchDataVPL'); location.reload(); }
+        function startNewMatchClear() {
+            localStorage.removeItem('liveMatchDataVPL');
+            location.reload();
+        }
 
         window.onload = () => {
-            if(isViewer) return; 
+            if(isViewer) return; // Viewer ko direct load hone dein
             updateOpenerSelectors();
             let savedLive = localStorage.getItem('liveMatchDataVPL');
             if(savedLive) {
                 let parsed = JSON.parse(savedLive);
-                if(confirm("Saved Match found. Resume?")) {
-                    match = parsed.match; teams = parsed.teams; historyStack = parsed.historyStack || [];
+                if(confirm("आपका एक अधूरा मैच सेव है। क्या आप उसे जारी रखना चाहते हैं? (Cancel करने पर नया मैच शुरू होगा)")) {
+                    match = parsed.match;
+                    teams = parsed.teams;
+                    historyStack = parsed.historyStack || [];
                     document.getElementById('setupSection').style.display = 'none';
                     document.getElementById('matchSection').style.display = 'block';
                     document.getElementById('displayMaxOvers').textContent = match.maxOvers;
                     document.getElementById('currentBowlerDisplay').textContent = match.currentBowler;
                     if(historyStack.length > 0) document.getElementById('undoBtn').disabled = false;
+                    
                     openView('scoringView');
-                    if(match.matchFinished) { finishMatch(); } else { updateUI(); }
+
+                    if(match.matchFinished) { 
+                        finishMatch();
+                    } else { 
+                        if(match.innings === 2) {
+                            document.getElementById('targetDiv').style.display = 'block';
+                            document.getElementById('targetRuns').textContent = match.target;
+                        }
+                        updateUI();
+                    }
+                } else {
+                    localStorage.removeItem('liveMatchDataVPL');
                 }
             }
         };
 
-        function updateUI(skipFirebase = false) {
-            if(match.matchFinished && !isViewer) return;
-            const batTeam = teams[match.battingTeam]; const bowlTeam = teams[match.bowlingTeam];
-            document.getElementById('displayBatTeam').textContent = batTeam.name;
-            document.getElementById('totalRuns').textContent = batTeam.runs;
-            document.getElementById('totalWickets').textContent = batTeam.wickets;
-            document.getElementById('currentOver').textContent = `${match.oversCompleted}.${match.ballsInOver}`;
-            document.getElementById('extrasTotal').textContent = batTeam.extras;
-            let currentTotalBalls = (match.oversCompleted * 6) + match.ballsInOver;
-            document.getElementById('crrDisplay').textContent = currentTotalBalls > 0 ? ((batTeam.runs / currentTotalBalls) * 6).toFixed(2) : "0.00";
-            document.getElementById('strikerName').textContent = batTeam.batsmen[match.strikerIdx].name;
-            document.getElementById('nonStrikerName').textContent = batTeam.batsmen[match.nonStrikerIdx].name;
-
-            const tbodyBat = document.querySelector('#battingScorecard tbody'); tbodyBat.innerHTML = "";
-            batTeam.batsmen.forEach((b, idx) => {
-                let sr = b.balls > 0 ? ((b.runs / b.balls) * 100).toFixed(1) : "0.0";
-                tbodyBat.innerHTML += `<tr class="${(idx === match.strikerIdx || idx === match.nonStrikerIdx) ? 'highlight' : ''}"><td>${b.name} ${(idx === match.strikerIdx)?'🏏':''}</td><td>${b.runs}</td><td>${b.balls}</td><td>${b.fours}</td><td>${b.sixes}</td><td>${sr}</td><td>${b.status}</td></tr>`;
-            });
-            const tbodyBowl = document.querySelector('#bowlingScorecard tbody'); tbodyBowl.innerHTML = "";
-            let activeBowlerStats = {balls:0, runs:0, wickets:0};
-            bowlTeam.bowlers.forEach((bw) => {
-                if(bw.balls > 0 || bw.runs > 0 || bw.name === match.currentBowler) {
-                    let isCurrent = bw.name === match.currentBowler; if(isCurrent) activeBowlerStats = bw;
-                    tbodyBowl.innerHTML += `<tr style="${isCurrent?'background:#ffeaa7;':''}"><td>${bw.name} ${isCurrent?'🎳':''}</td><td>${Math.floor(bw.balls/6)}.${bw.balls%6}</td><td>${bw.runs}</td><td>${bw.wickets}</td><td>${bw.balls>0?(bw.runs/(bw.balls/6)).toFixed(2):'0.00'}</td></tr>`;
-                }
-            });
-            document.getElementById('liveBowlerSpell').textContent = `${Math.floor(activeBowlerStats.balls/6)}.${activeBowlerStats.balls%6}-${activeBowlerStats.runs}-${activeBowlerStats.wickets}`;
-            document.getElementById('liveBowlerEco').textContent = activeBowlerStats.balls>0?(activeBowlerStats.runs/(activeBowlerStats.balls/6)).toFixed(2):'0.00';
-            if(!isViewer) {
-                if (match.ballsInOver === 6) { document.getElementById('endOverBtn').disabled = false; disableActionButtons(true); } 
-                else { document.getElementById('endOverBtn').disabled = true; if(!match.isComplete) disableActionButtons(false); }
-                if(match.innings === 1 && match.isComplete) { document.getElementById('startSecondInningsBtn').style.display = 'inline-block'; disableActionButtons(true); } 
-                else { document.getElementById('startSecondInningsBtn').style.display = 'none'; }
-                if(!skipFirebase) saveLiveMatch();
-            }
-        }
-
-        // Functions for core logic (setupMatch, handleBall, etc.) remain as in your original file.
-        // I have integrated the necessary Firebase updates in saveLiveMatch and finishMatch.
-
-        function handleBall(runs, isWicket = false) {
-            if(match.isComplete || match.matchFinished) return;
-            saveState();
-            const batTeam = teams[match.battingTeam]; const striker = batTeam.batsmen[match.strikerIdx]; const bowler = getCurrentBowlerRef();
-            if (isWicket) {
-                triggerAnim('W'); striker.status = 'Out'; striker.balls++; batTeam.wickets++; bowler.balls++; bowler.wickets++; match.ballsInOver++;
-                checkMatchStatus(); if (!match.isComplete && !match.matchFinished) { openSelectorModal('nextBatsman'); }
-                updateUI(); return;
-            }
-            if(runs === 4) triggerAnim(4); if(runs === 6) triggerAnim(6); 
-            striker.runs += runs; striker.balls++; if (runs === 4) striker.fours++; if (runs === 6) striker.sixes++;
-            batTeam.runs += runs; bowler.runs += runs; bowler.balls++; match.ballsInOver++;
-            if (runs % 2 !== 0) switchStrike();
-            checkMatchStatus(); if(!match.matchFinished) updateUI();
-        }
-
-        function finishMatch() {
-            if(match.matchFinished && !isViewer) return; 
-            match.matchFinished = true; match.isComplete = true;
-            if(!isViewer) { db.ref('VillagePremierLeague/LiveMatch/match').update({ matchFinished: true, isComplete: true }); }
-            
-            const res = document.getElementById('resultText'); res.style.display = "block";
-            const t1r = teams.team1.runs, t2r = teams.team2.runs; let winnerText = (t2r >= match.target && match.innings === 2) ? `🏆 Winner: ${teams.team2.name}! 🏆` : (t1r > t2r ? `🏆 Winner: ${teams.team1.name}! 🏆` : "🤝 Match Tied! 🤝");
-            res.textContent = winnerText;
-            
-            let motm = calculateMOTM(); if(motm) { document.getElementById('motmContainer').innerHTML = `<div class="motm-box">⭐ Man of the Match ⭐<span class="motm-name">${motm.name}</span><span class="motm-stats">${motm.perf}</span></div>`; }
-            
-            const fsb = document.getElementById('fullScoreboard'); fsb.style.display = "block";
-            let fsbHTML = `<h3 style="color:#0B6623; text-align:center;">📊 Match Scoreboard 📊</h3>`;
-            [teams.team1, teams.team2].forEach((team, index) => {
-                fsbHTML += `<div style="background:#fff; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #ccc;"><h4>Innings ${index+1}: ${team.name} - ${team.runs}/${team.wickets}</h4><table style="width:100%; border-collapse:collapse; text-align:center;"><thead><tr style="background:#189AB4; color:white;"><th>Player</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>S/R</th></tr></thead><tbody>`;
-                team.batsmen.forEach(b => { fsbHTML += `<tr><td>${b.name}</td><td>${b.runs}</td><td>${b.balls}</td><td>${b.fours}</td><td>${b.sixes}</td><td>${b.balls>0?((b.runs/b.balls)*100).toFixed(1):'0.0'}</td></tr>`; });
-                fsbHTML += `</tbody></table></div>`;
-            });
-            fsb.innerHTML = fsbHTML;
-            if(!isViewer) { saveMatchHistory(winnerText, motm ? motm.name : ""); localStorage.removeItem('liveMatchDataVPL'); document.getElementById('scoringZone').style.display = 'none'; document.getElementById('downloadPdfBtn').style.display = 'block'; document.getElementById('rematchBtn').style.display = 'block'; }
-        }
-
-        function finishMatchViewer() { finishMatch(); }
-
-        // --- ALL ORIGINAL HELPER FUNCTIONS (triggerAnim, setupMatch, updateOpenerSelectors, etc.) ---
         function triggerAnim(type) {
-            const overlay = document.getElementById('animOverlay'); const text = document.getElementById('animText');
-            if(type === 'W') { text.textContent = "OUT!"; text.style.color = "#D72631"; overlay.style.background = "rgba(215, 38, 49, 0.7)"; } 
-            else if(type === 4) { text.textContent = "FOUR!"; text.style.color = "#75E6DA"; overlay.style.background = "rgba(5, 68, 94, 0.8)"; } 
-            else if(type === 6) { text.textContent = "SIX!"; text.style.color = "#f39c12"; overlay.style.background = "rgba(11, 102, 35, 0.8)"; }
-            overlay.style.display = 'flex'; setTimeout(() => { overlay.style.display = 'none'; }, 1500);
+            const overlay = document.getElementById('animOverlay');
+            const text = document.getElementById('animText');
+            if(type === 'W') { 
+                text.textContent = "OUT!";
+                text.style.color = "#D72631"; 
+                overlay.style.background = "rgba(215, 38, 49, 0.7)"; 
+            } else if(type === 4) { 
+                text.textContent = "FOUR!";
+                text.style.color = "#75E6DA"; 
+                overlay.style.background = "rgba(5, 68, 94, 0.8)"; 
+            } else if(type === 6) { 
+                text.textContent = "SIX!";
+                text.style.color = "#f39c12"; 
+                overlay.style.background = "rgba(11, 102, 35, 0.8)"; 
+            }
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.style.display = 'none'; }, 1500);
         }
 
         function calculateMOTM() {
-            let bestPlayer = ""; let maxPoints = -1; let bestPerfDesc = "";
+            let bestPlayer = "";
+            let maxPoints = -1;
+            let bestPerfDesc = "";
+
             [teams.team1, teams.team2].forEach(team => {
                 team.players.forEach(playerName => {
                     let points = 0; let desc = [];
                     let batData = team.batsmen.find(b => b.name === playerName);
-                    if(batData) { points += batData.runs; if(batData.runs > 0) desc.push(`🏏 ${batData.runs} Runs`); }
+                    if(batData) {
+                        points += batData.runs;
+                        if(batData.runs >= 50) points += 10;
+                        if(batData.sixes > 0) points += (batData.sixes * 2);
+                        if(batData.runs > 0) desc.push(`🏏 ${batData.runs} Runs (${batData.balls}b)`);
+                    }
                     let bowlData = team.bowlers.find(b => b.name === playerName);
-                    if(bowlData && bowlData.wickets > 0) { points += (bowlData.wickets * 20); desc.push(`🎳 ${bowlData.wickets} Wkts`); }
-                    if(points > maxPoints && points > 0) { maxPoints = points; bestPlayer = playerName; bestPerfDesc = desc.join(" | "); }
+                    if(bowlData && bowlData.wickets > 0) {
+                        points += (bowlData.wickets * 20);
+                        if(bowlData.wickets >= 3) points += 10;
+                        desc.push(`🎳 ${bowlData.wickets} Wkts (${bowlData.runs} Runs)`);
+                    }
+                    if(points > maxPoints && points > 0) {
+                        maxPoints = points; bestPlayer = playerName; bestPerfDesc = desc.join(" | ");
+                    }
                 });
             });
-            return bestPlayer === "" ? null : { name: bestPlayer, perf: bestPerfDesc };
+            if(bestPlayer === "") return null;
+            return { name: bestPlayer, perf: bestPerfDesc };
         }
 
         function saveMatchHistory(resultText, motmText) {
             let history = JSON.parse(localStorage.getItem('cricketMatchHistory')) || [];
-            history.push({ date: new Date().toLocaleString(), t1: `${teams.team1.name} ${teams.team1.runs}/${teams.team1.wickets}`, t2: `${teams.team2.name} ${teams.team2.runs}/${teams.team2.wickets}`, winner: resultText, motm: motmText });
+            let record = {
+                date: new Date().toLocaleString('hi-IN'),
+                t1: `${teams.team1.name} - ${teams.team1.runs}/${teams.team1.wickets}`,
+                t2: `${teams.team2.name} - ${teams.team2.runs}/${teams.team2.wickets}`,
+                winner: resultText,
+                motm: motmText,
+                fullData: JSON.parse(JSON.stringify(teams)) 
+            };
+            history.push(record);
             localStorage.setItem('cricketMatchHistory', JSON.stringify(history));
         }
 
@@ -539,66 +845,374 @@
             let container = document.getElementById('historyContainer');
             if (container.style.display === 'block') { container.style.display = 'none'; return; }
             let history = JSON.parse(localStorage.getItem('cricketMatchHistory')) || [];
-            container.innerHTML = history.length === 0 ? "<p>No history.</p>" : history.map(m => `<div>${m.date}: ${m.t1} vs ${m.t2} - <b>${m.winner}</b></div>`).join('');
+            if (history.length === 0) {
+                container.innerHTML = "<p style='text-align:center; color:#777;'>अभी तक कोई पिछला मैच रिकॉर्ड नहीं है।</p>";
+            } else {
+                let html = "<h3 style='color:#05445E; margin-top:0;'>पुराने मैचों का रिकॉर्ड</h3>";
+                let revHistory = history.slice().reverse();
+                revHistory.forEach((m, index) => {
+                    let actualIdx = history.length - 1 - index;
+                    let motmStr = m.motm ? `<div style="background:#f1c40f; color:#000; padding:3px 5px; border-radius:4px; font-size:0.8em; margin-top:5px; display:inline-block;">🏆 MOTM: ${m.motm}</div>` : "";
+                    html += `<div style="border-bottom:1px solid #ddd; padding-bottom:10px; margin-bottom:10px;">
+                        <small style="color:#777;">🗓️ ${m.date}</small><br>
+                        <b>🏏 ${m.t1}</b> <br>⚔️ VS <br><b>🏏 ${m.t2}</b><br>
+                        <span style="color:#0B6623; font-weight:bold; font-size:1.1em;">${m.winner}</span><br>
+                        ${motmStr}<br>
+                        <button onclick="togglePastScore(${actualIdx})" style="background:#189AB4; font-size:0.8em; padding:6px; margin-top:8px; border-radius:4px; color:white; border:none;">📊 पूरा स्कोरबोर्ड देखें</button>
+                        <div id="pastScore_${actualIdx}" class="past-score-table">`;
+                    if(m.fullData) {
+                        [m.fullData.team1, m.fullData.team2].forEach((t, i) => {
+                            html += `<h4 style="margin: 15px 0 5px 0; color:#05445E;">Innings ${i+1}: ${t.name} (${t.runs}/${t.wickets})</h4>
+                                     <table style="width:100%; border-collapse:collapse; text-align:center; margin-bottom:5px;">
+                                     <tr style="background:#189AB4; color:white;"><th>खिलाड़ी</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>S/R</th></tr>`;
+                            t.batsmen.forEach(b => {
+                                let sr = b.balls > 0 ? ((b.runs / b.balls) * 100).toFixed(1) : "0.0";
+                                let statusText = b.status === 'Yet to Bat' ? '-' : (b.status === 'out' ? 'Out' : 'Not Out');
+                                html += `<tr><td>${b.name} <br><small>(${statusText})</small></td><td>${b.runs}</td><td>${b.balls}</td><td>${b.fours}</td><td>${b.sixes}</td><td>${sr}</td></tr>`;
+                            });
+                            html += `</table>`;
+                            if(t.bowlers) {
+                                html += `<h5 style="margin: 10px 0 5px 0; color:#d35400;">Bowling</h5>
+                                         <table style="width:100%; border-collapse:collapse; text-align:center; margin-bottom:10px;">
+                                         <tr style="background:#d35400; color:white;"><th>गेंदबाज</th><th>Ov</th><th>R</th><th>W</th><th>E/R</th></tr>`;
+                                t.bowlers.forEach(bw => {
+                                    if(bw.balls > 0 || bw.runs > 0) {
+                                        let ovs = Math.floor(bw.balls / 6) + "." + (bw.balls % 6);
+                                        let er = bw.balls > 0 ? (bw.runs / (bw.balls / 6)).toFixed(2) : "0.00";
+                                        html += `<tr><td>${bw.name}</td><td>${ovs}</td><td>${bw.runs}</td><td>${bw.wickets}</td><td>${er}</td></tr>`;
+                                    }
+                                });
+                                html += `</table>`;
+                            }
+                        });
+                    } else {
+                        html += "<i>पुराने डेटा का स्कोरबोर्ड उपलब्ध नहीं है।</i>";
+                    }
+                    html += `</div></div>`;
+                });
+                html += `<button onclick="clearHistory()" style="background:#e74c3c; color:white; border:none; width:100%; margin-top:10px; padding:8px; font-size:0.9em; box-shadow:none;">🗑️ सभी रिकॉर्ड डिलीट करें</button>`;
+                container.innerHTML = html;
+            }
             container.style.display = 'block';
+        }
+
+        function togglePastScore(idx) {
+            let el = document.getElementById('pastScore_' + idx);
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function clearHistory() {
+            if(confirm("क्या आप सच में सारे पुराने मैचों का रिकॉर्ड हमेशा के लिए डिलीट करना चाहते हैं?")) {
+                localStorage.removeItem('cricketMatchHistory');
+                document.getElementById('historyContainer').style.display = 'none';
+                alert("रिकॉर्ड डिलीट हो गया!");
+            }
+        }
+
+        function downloadScoreboardPDF() { window.print(); }
+
+        function saveState() {
+            historyStack.push({ match: JSON.parse(JSON.stringify(match)), teams: JSON.parse(JSON.stringify(teams)) });
+            document.getElementById('undoBtn').disabled = false;
+        }
+
+        function undoLastAction() {
+            if(historyStack.length > 0) {
+                let lastState = historyStack.pop();
+                match = lastState.match; teams = lastState.teams;
+                if(historyStack.length === 0) document.getElementById('undoBtn').disabled = true;
+                if(!match.matchFinished) {
+                    document.getElementById('resultText').style.display = "none";
+                    document.getElementById('motmContainer').innerHTML = "";
+                    document.getElementById('fullScoreboard').style.display = "none";
+                    document.getElementById('downloadPdfBtn').style.display = "none";
+                    document.getElementById('rematchBtn').style.display = "none";
+                    document.getElementById('scoringZone').style.display = "block";
+                    document.getElementById('liveScorecardSection').style.display = "block";
+                    document.getElementById('livePlayerStats').style.display = "flex";
+                    document.getElementById('endOverBtn').style.display = "inline-block";
+                }
+                document.getElementById('currentBowlerDisplay').textContent = match.currentBowler;
+                updateUI();
+            }
+        }
+
+        function updateOpenerSelectors() {
+            let t1Names = document.getElementById('team1Players').value.split(',').map(n=>n.trim()).filter(n=>n);
+            let t2Names = document.getElementById('team2Players').value.split(',').map(n=>n.trim()).filter(n=>n);
+            let sHTML = ""; let nsHTML = "";
+            t1Names.forEach((name, idx) => {
+                sHTML += `<option value="${idx}">${name}</option>`;
+                nsHTML += `<option value="${idx}" ${idx==1?'selected':''}>${name}</option>`;
+            });
+            document.getElementById('selectStriker').innerHTML = sHTML;
+            document.getElementById('selectNonStriker').innerHTML = nsHTML;
+            let bHTML = "";
+            t2Names.forEach((name) => { bHTML += `<option value="${name}">${name}</option>`; });
+            document.getElementById('selectFirstBowler').innerHTML = bHTML;
         }
 
         function setupMatch() {
             match.maxOvers = parseInt(document.getElementById('totalOversInput').value) || 5;
-            teams.team1.name = document.getElementById('team1Name').value; teams.team2.name = document.getElementById('team2Name').value;
-            teams.team1.players = document.getElementById('team1Players').value.split(',').map(n => n.trim());
-            teams.team2.players = document.getElementById('team2Players').value.split(',').map(n => n.trim());
+            teams.team1.name = document.getElementById('team1Name').value || 'Team 1';
+            teams.team2.name = document.getElementById('team2Name').value || 'Team 2';
+            teams.team1.players = document.getElementById('team1Players').value.split(',').map(n => n.trim()).filter(n => n !== "");
+            teams.team2.players = document.getElementById('team2Players').value.split(',').map(n => n.trim()).filter(n => n !== "");
+
             teams.team1.batsmen = teams.team1.players.map(name => ({ name, runs: 0, balls: 0, fours: 0, sixes: 0, status: 'Yet to Bat' }));
             teams.team2.batsmen = teams.team2.players.map(name => ({ name, runs: 0, balls: 0, fours: 0, sixes: 0, status: 'Yet to Bat' }));
             teams.team1.bowlers = teams.team1.players.map(name => ({ name, runs: 0, balls: 0, wickets: 0 }));
             teams.team2.bowlers = teams.team2.players.map(name => ({ name, runs: 0, balls: 0, wickets: 0 }));
-            match.strikerIdx = parseInt(document.getElementById('selectStriker').value);
-            match.nonStrikerIdx = parseInt(document.getElementById('selectNonStriker').value);
-            match.currentBowler = document.getElementById('selectFirstBowler').value;
-            teams.team1.batsmen[match.strikerIdx].status = 'Not Out'; teams.team1.batsmen[match.nonStrikerIdx].status = 'Not Out';
-            document.getElementById('setupSection').style.display = 'none'; document.getElementById('matchSection').style.display = 'block';
-            document.getElementById('displayMaxOvers').textContent = match.maxOvers; document.getElementById('currentBowlerDisplay').textContent = match.currentBowler;
+
+            let sIdx = parseInt(document.getElementById('selectStriker').value);
+            let nsIdx = parseInt(document.getElementById('selectNonStriker').value);
+            let firstBowler = document.getElementById('selectFirstBowler').value;
+            
+            if(isNaN(sIdx) || isNaN(nsIdx) || !firstBowler) { alert("कृपया सुनिश्चित करें कि खिलाड़ियों के नाम ठीक से भरे गए हैं।"); return; }
+            if(sIdx === nsIdx) { alert("स्ट्राइकर और नॉन-स्ट्राइकर एक ही खिलाड़ी नहीं हो सकते!"); return; }
+
+            match.strikerIdx = sIdx; match.nonStrikerIdx = nsIdx;
+            teams.team1.batsmen[sIdx].status = 'Not Out'; teams.team1.batsmen[nsIdx].status = 'Not Out';
+            match.currentBowler = firstBowler;
+            
+            document.getElementById('setupSection').style.display = 'none';
+            document.getElementById('matchSection').style.display = 'block';
+            document.getElementById('displayMaxOvers').textContent = match.maxOvers;
+            document.getElementById('currentBowlerDisplay').textContent = match.currentBowler;
             updateUI();
         }
 
-        function saveState() { historyStack.push({ match: JSON.parse(JSON.stringify(match)), teams: JSON.parse(JSON.stringify(teams)) }); document.getElementById('undoBtn').disabled = false; }
-        function undoLastAction() { if(historyStack.length > 0) { let s = historyStack.pop(); match = s.match; teams = s.teams; if(historyStack.length===0) document.getElementById('undoBtn').disabled = true; updateUI(); } }
-        function updateOpenerSelectors() {
-            let t1 = document.getElementById('team1Players').value.split(',').map(n=>n.trim());
-            let t2 = document.getElementById('team2Players').value.split(',').map(n=>n.trim());
-            document.getElementById('selectStriker').innerHTML = t1.map((n, i) => `<option value="${i}">${n}</option>`).join('');
-            document.getElementById('selectNonStriker').innerHTML = t1.map((n, i) => `<option value="${i}" ${i==1?'selected':''}>${n}</option>`).join('');
-            document.getElementById('selectFirstBowler').innerHTML = t2.map(n => `<option value="${n}">${n}</option>`).join('');
+        function updateUI(isFromFirebase = false) {
+            if(match.matchFinished && !isViewer) return;
+            const batTeam = teams[match.battingTeam]; const bowlTeam = teams[match.bowlingTeam];
+            
+            document.getElementById('displayBatTeam').textContent = batTeam.name;
+            document.getElementById('totalRuns').textContent = batTeam.runs;
+            document.getElementById('totalWickets').textContent = batTeam.wickets;
+            document.getElementById('currentOver').textContent = `${match.oversCompleted}.${match.ballsInOver}`;
+            document.getElementById('extrasTotal').textContent = batTeam.extras;
+            
+            let currentTotalBalls = (match.oversCompleted * 6) + match.ballsInOver;
+            let crr = currentTotalBalls > 0 ? ((batTeam.runs / currentTotalBalls) * 6).toFixed(2) : "0.00";
+            document.getElementById('crrDisplay').textContent = crr;
+
+            document.getElementById('strikerName').textContent = batTeam.batsmen[match.strikerIdx].name;
+            document.getElementById('nonStrikerName').textContent = batTeam.batsmen[match.nonStrikerIdx].name;
+
+            const tbodyBat = document.querySelector('#battingScorecard tbody');
+            tbodyBat.innerHTML = "";
+            batTeam.batsmen.forEach((b, idx) => {
+                let sr = b.balls > 0 ? ((b.runs / b.balls) * 100).toFixed(1) : "0.0";
+                let dispStat = b.status === 'Yet to Bat' ? '-' : b.status;
+                let row = `<tr class="${(idx === match.strikerIdx || idx === match.nonStrikerIdx) ? 'highlight' : ''}">
+                    <td>${b.name} ${(idx === match.strikerIdx)?'🏏':''}</td>
+                    <td>${b.runs}</td><td>${b.balls}</td><td>${b.fours}</td><td>${b.sixes}</td><td>${sr}</td><td>${dispStat}</td>
+                </tr>`;
+                tbodyBat.innerHTML += row;
+            });
+            
+            const tbodyBowl = document.querySelector('#bowlingScorecard tbody');
+            tbodyBowl.innerHTML = "";
+            let activeBowlerStats = {balls:0, runs:0, wickets:0};
+            
+            bowlTeam.bowlers.forEach((bw) => {
+                if(bw.balls > 0 || bw.runs > 0 || bw.name === match.currentBowler) {
+                    let ovs = Math.floor(bw.balls / 6) + "." + (bw.balls % 6);
+                    let er = bw.balls > 0 ? (bw.runs / (bw.balls / 6)).toFixed(2) : "0.00";
+                    let isCurrent = bw.name === match.currentBowler;
+                    let rowStyle = isCurrent ? 'background:#ffeaa7;' : '';
+                    if(isCurrent) activeBowlerStats = bw;
+                    tbodyBowl.innerHTML += `<tr style="${rowStyle}">
+                        <td>${bw.name} ${isCurrent?'🎳':''}</td>
+                        <td>${ovs}</td><td>${bw.runs}</td><td>${bw.wickets}</td><td>${er}</td>
+                    </tr>`;
+                }
+            });
+            
+            let actOv = Math.floor(activeBowlerStats.balls / 6) + "." + (activeBowlerStats.balls % 6);
+            let actEr = activeBowlerStats.balls > 0 ? (activeBowlerStats.runs / (activeBowlerStats.balls / 6)).toFixed(2) : "0.00";
+            document.getElementById('liveBowlerSpell').textContent = `${actOv}-${activeBowlerStats.runs}-${activeBowlerStats.wickets}`;
+            document.getElementById('liveBowlerEco').textContent = actEr;
+
+            if (match.ballsInOver === 6) { document.getElementById('endOverBtn').disabled = false; disableActionButtons(true); } 
+            else { document.getElementById('endOverBtn').disabled = true; if(!match.isComplete) disableActionButtons(false); }
+
+            if(match.innings === 1 && match.isComplete) { document.getElementById('startSecondInningsBtn').style.display = 'inline-block'; disableActionButtons(true); } 
+            else { document.getElementById('startSecondInningsBtn').style.display = 'none'; }
+            
+            if(!isFromFirebase) { saveLiveMatch(); }
         }
-        function getCurrentBowlerRef() { let bTeam = teams[match.bowlingTeam]; let b = bTeam.bowlers.find(x => x.name === match.currentBowler); if(!b){ b = {name: match.currentBowler, runs:0, balls:0, wickets:0}; bTeam.bowlers.push(b); } return b; }
-        function handleExtra(type) { saveState(); teams[match.battingTeam].runs += 1; teams[match.battingTeam].extras += 1; getCurrentBowlerRef().runs += 1; checkMatchStatus(); updateUI(); }
-        function manualSwitchStrike() { saveState(); switchStrike(); }
-        function switchStrike() { let t = match.strikerIdx; match.strikerIdx = match.nonStrikerIdx; match.nonStrikerIdx = t; updateUI(); }
-        function checkMatchStatus() {
-            let bTeam = teams[match.battingTeam]; let allOut = bTeam.batsmen.length - 1;
-            if (match.innings === 2) { if (bTeam.runs >= match.target || bTeam.wickets >= allOut || (match.oversCompleted >= match.maxOvers && match.ballsInOver === 0)) finishMatch(); }
-            else if (match.innings === 1) { if (bTeam.wickets >= allOut || (match.oversCompleted >= match.maxOvers && match.ballsInOver === 0)) match.isComplete = true; }
+
+        function getCurrentBowlerRef() {
+            let bowlTeam = teams[match.bowlingTeam];
+            let bowler = bowlTeam.bowlers.find(b => b.name === match.currentBowler);
+            if(!bowler) { bowler = { name: match.currentBowler, runs: 0, balls: 0, wickets: 0 }; bowlTeam.bowlers.push(bowler); }
+            return bowler;
         }
-        function endOver() { saveState(); match.oversCompleted++; match.ballsInOver = 0; switchStrike(); match.lastBowler = match.currentBowler; checkMatchStatus(); if (!match.isComplete && !match.matchFinished) openSelectorModal('nextBowler'); else updateUI(); }
-        function openSelectorModal(act) {
-            pendingAction = act; let t = ""; let h = "";
-            if (act.includes('Batsman') || act.includes('Striker')) {
-                t = "Select Batsman"; let bTeam = teams[match.battingTeam]; h = `<select id="modalDropdown" class="modal-input">${bTeam.batsmen.map((b, i) => b.status==='Yet to Bat'?`<option value="${i}">${b.name}</option>`:'').join('')}</select>`;
-            } else {
-                t = "Select Bowler"; let bTeam = teams[match.bowlingTeam]; h = `<select id="modalDropdown" class="modal-input">${bTeam.players.map(p => p!==match.lastBowler?`<option value="${p}">${p}</option>`:'').join('')}</select>`;
+
+        function handleBall(runs, isWicket = false) {
+            if(match.isComplete || match.matchFinished) return;
+            saveState();
+            const batTeam = teams[match.battingTeam]; const striker = batTeam.batsmen[match.strikerIdx]; const bowler = getCurrentBowlerRef();
+            
+            if (isWicket) {
+                triggerAnim('W'); striker.status = 'Out'; striker.balls++; batTeam.wickets++; bowler.balls++; bowler.wickets++; match.ballsInOver++;
+                checkMatchStatus(); if (!match.isComplete && !match.matchFinished) { openSelectorModal('nextBatsman'); }
+                updateUI(); return;
             }
-            document.getElementById('modalTitle').textContent = t; document.getElementById('modalBody').innerHTML = h; document.getElementById('customModal').style.display = 'flex';
+
+            if(runs === 4) triggerAnim(4); if(runs === 6) triggerAnim(6); 
+            striker.runs += runs; striker.balls++;
+            if (runs === 4) striker.fours++; if (runs === 6) striker.sixes++;
+            batTeam.runs += runs; bowler.runs += runs; bowler.balls++; match.ballsInOver++;
+            
+            if (runs % 2 !== 0) switchStrike();
+            checkMatchStatus(); if(!match.matchFinished) updateUI();
         }
+
+        function handleExtra(type) {
+            if(match.isComplete || match.matchFinished) return;
+            saveState();
+            teams[match.battingTeam].runs += 1; teams[match.battingTeam].extras += 1;
+            const bowler = getCurrentBowlerRef(); bowler.runs += 1; 
+            checkMatchStatus(); if(!match.matchFinished) updateUI();
+        }
+
+        function handleByeLegBye() {
+            if(match.isComplete || match.matchFinished) return;
+            let runsStr = prompt("कितने एक्स्ट्रा रन (Byes / Leg Byes)? (1 से 6 तक लिखें)", "1");
+            if(runsStr === null) return;
+            let runs = parseInt(runsStr);
+            if(isNaN(runs) || runs < 1 || runs > 6) { alert("कृपया 1 से 6 के बीच सही रन डालें!"); return; }
+
+            saveState();
+            const batTeam = teams[match.battingTeam]; const striker = batTeam.batsmen[match.strikerIdx]; const bowler = getCurrentBowlerRef();
+            batTeam.runs += runs; batTeam.extras += runs; striker.balls++; bowler.balls++; match.ballsInOver++;
+            if (runs % 2 !== 0) switchStrike();
+            checkMatchStatus(); if(!match.matchFinished) updateUI();
+        }
+
+        function manualSwitchStrike() { saveState(); switchStrike(); }
+        function switchStrike() { let temp = match.strikerIdx; match.strikerIdx = match.nonStrikerIdx; match.nonStrikerIdx = temp; updateUI(); }
+
+        function checkMatchStatus() {
+            const batTeam = teams[match.battingTeam]; const allOutWickets = batTeam.batsmen.length - 1;
+            if (match.innings === 2) {
+                if (batTeam.runs >= match.target || batTeam.wickets >= allOutWickets || (match.oversCompleted >= match.maxOvers && match.ballsInOver === 0)) { finishMatch(); }
+            } else if (match.innings === 1) {
+                if (batTeam.wickets >= allOutWickets || (match.oversCompleted >= match.maxOvers && match.ballsInOver === 0)) { match.isComplete = true; }
+            }
+        }
+
+        function endOver() {
+            saveState(); match.oversCompleted++; match.ballsInOver = 0; switchStrike(); match.lastBowler = match.currentBowler; checkMatchStatus();
+            if (!match.isComplete && !match.matchFinished) { openSelectorModal('nextBowler'); } else { updateUI(); }
+        }
+
+        function openSelectorModal(action) {
+            let title = ""; let selectHTML = ""; pendingAction = action;
+            if (action === 'nextBatsman' || action === 'changeStriker' || action === 'changeNonStriker') {
+                title = "बल्लेबाज चुनें (Select Batsman)"; let batTeam = teams[match.battingTeam]; let opts = "";
+                batTeam.batsmen.forEach((b, i) => { if(b.status === 'Yet to Bat') { opts += `<option value="${i}">${b.name}</option>`; } });
+                if(opts === "") { alert("कोई अन्य खिलाड़ी उपलब्ध नहीं है!"); return; }
+                selectHTML = `<select id="modalDropdown" class="modal-input">${opts}</select>`;
+            }
+            else if (action === 'nextBowler') {
+                title = "गेंदबाज चुनें (Select Bowler)"; let bowlTeam = teams[match.bowlingTeam]; let opts = "";
+                bowlTeam.players.forEach(p => {
+                    if(p !== match.lastBowler) {
+                        let existingB = bowlTeam.bowlers.find(x => x.name === p); let statStr = "";
+                        if(existingB && (existingB.runs > 0 || existingB.balls > 0)) { statStr = ` (${Math.floor(existingB.balls/6)}.${existingB.balls%6} Ov, ${existingB.wickets} W)`; }
+                        opts += `<option value="${p}">${p}${statStr}</option>`;
+                    }
+                });
+                selectHTML = `<select id="modalDropdown" class="modal-input">${opts}</select>`;
+            }
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = selectHTML;
+            document.getElementById('customModal').style.display = 'flex';
+        }
+
         document.getElementById('modalSubmitBtn').onclick = () => {
-            let v = document.getElementById('modalDropdown').value;
-            if(pendingAction==='nextBatsman'){ match.strikerIdx = parseInt(v); teams[match.battingTeam].batsmen[match.strikerIdx].status = 'Not Out'; }
-            else if(pendingAction==='nextBowler'){ match.currentBowler = v; }
+            let dropdown = document.getElementById('modalDropdown'); if(!dropdown) return; let val = dropdown.value;
+            if(pendingAction === 'nextBatsman') { match.strikerIdx = parseInt(val); teams[match.battingTeam].batsmen[match.strikerIdx].status = 'Not Out'; }
+            else if(pendingAction === 'changeStriker' || pendingAction === 'changeNonStriker') {
+                saveState(); let newIdx = parseInt(val); let batTeam = teams[match.battingTeam];
+                if(pendingAction === 'changeStriker') { batTeam.batsmen[match.strikerIdx].status = 'Yet to Bat'; match.strikerIdx = newIdx; } 
+                else { batTeam.batsmen[match.nonStrikerIdx].status = 'Yet to Bat'; match.nonStrikerIdx = newIdx; }
+                batTeam.batsmen[newIdx].status = 'Not Out';
+            }
+            else if(pendingAction === 'nextBowler') { match.currentBowler = val; }
             document.getElementById('customModal').style.display = 'none'; updateUI();
         };
+
+        document.getElementById('startSecondInningsBtn').onclick = () => { 
+            saveState(); match.target = teams.team1.runs + 1; match.battingTeam = 'team2'; match.bowlingTeam = 'team1';
+            match.innings = 2; match.oversCompleted = 0; match.ballsInOver = 0; match.lastBowler = ''; match.currentBowler = teams.team1.players[0]; match.isComplete = false;
+            match.strikerIdx = 0; match.nonStrikerIdx = 1; teams.team2.batsmen[0].status = 'Not Out'; teams.team2.batsmen[1].status = 'Not Out';
+            document.getElementById('targetDiv').style.display = 'block'; document.getElementById('targetRuns').textContent = match.target;
+            document.getElementById('startSecondInningsBtn').style.display = 'none'; disableActionButtons(false); updateUI();
+            alert("दूसरी पारी शुरू हो गई है! शुरुआत के 2 खिलाड़ी सेट कर दिए गए हैं।");
+        };
+
+        function finishMatch() {
+            if(match.matchFinished) return; 
+            match.matchFinished = true; match.isComplete = true;
+
+            if (typeof isViewer !== 'undefined' && !isViewer && window.db) {
+                db.ref('VillagePremierLeague/LiveMatch/match').update({ matchFinished: true, isComplete: true });
+            }
+
+            const res = document.getElementById('resultText'); res.style.display = "block";
+            const t1r = teams.team1.runs, t2r = teams.team2.runs; let winnerText = "";
+            if(t2r >= match.target && match.innings === 2) winnerText = `🏆 Winner: ${teams.team2.name}! 🏆`;
+            else if(t1r > t2r) winnerText = `🏆 Winner: ${teams.team1.name}! 🏆`; else winnerText = "🤝 Match Tied! 🤝";
+            res.textContent = winnerText;
+            
+            let motm = calculateMOTM(); let motmStr = "";
+            if(motm) {
+                motmStr = motm.name;
+                document.getElementById('motmContainer').innerHTML = `<div class="motm-box">⭐ Man of the Match ⭐<span class="motm-name">${motm.name}</span><span class="motm-stats">${motm.perf}</span></div>`;
+            }
+
+            const fsb = document.getElementById('fullScoreboard'); fsb.style.display = "block";
+            let fsbHTML = `<h3 style="color:#0B6623; text-align:center;">📊 मैच का पूरा स्कोरबोर्ड 📊</h3>`;
+            [teams.team1, teams.team2].forEach((team, index) => {
+                fsbHTML += `<div style="background:#fff; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #ccc;">
+                    <h4 style="margin: 0 0 10px 0; color:#05445E; font-size:1.2em;">Innings ${index+1}: ${team.name} - ${team.runs}/${team.wickets} <span style="font-size:0.7em; color:#555;">(Extras: ${team.extras})</span></h4>
+                    <div class="table-responsive"><table style="margin-bottom: 15px;"><thead><tr><th>खिलाड़ी</th><th>रन</th><th>बॉल</th><th>4s</th><th>6s</th><th>S/R</th><th>Status</th></tr></thead><tbody>`;
+                team.batsmen.forEach(b => {
+                    let sr = b.balls > 0 ? ((b.runs / b.balls) * 100).toFixed(1) : "0.0"; let displayStatus = b.status === 'Yet to Bat' ? '-' : b.status;
+                    fsbHTML += `<tr><td>${b.name}</td><td>${b.runs}</td><td>${b.balls}</td><td>${b.fours}</td><td>${b.sixes}</td><td>${sr}</td><td>${displayStatus}</td></tr>`;
+                });
+                fsbHTML += `</tbody></table></div><h5 style="margin:0 0 5px 0; color:#d35400;">गेंदबाजी (Bowling)</h5><div class="table-responsive">
+                <table><thead><tr style="background:#d35400;"><th>गेंदबाज</th><th>ओवर</th><th>रन</th><th>विकेट</th><th>E/R</th></tr></thead><tbody>`;
+                team.bowlers.forEach(bw => {
+                    if(bw.balls > 0 || bw.runs > 0) {
+                        let ovs = Math.floor(bw.balls / 6) + "." + (bw.balls % 6); let er = bw.balls > 0 ? (bw.runs / (bw.balls / 6)).toFixed(2) : "0.00";
+                        fsbHTML += `<tr><td>${bw.name}</td><td>${ovs}</td><td>${bw.runs}</td><td>${bw.wickets}</td><td>${er}</td></tr>`;
+                    }
+                });
+                fsbHTML += `</tbody></table></div></div>`;
+            });
+            fsb.innerHTML = fsbHTML;
+            
+            if(!isViewer) {
+                saveMatchHistory(winnerText, motmStr); 
+                localStorage.removeItem('liveMatchDataVPL');
+                document.getElementById('scoringZone').style.display = 'none'; document.getElementById('endOverBtn').style.display = 'none';
+                document.getElementById('liveScorecardSection').style.display = 'none'; document.getElementById('livePlayerStats').style.display = 'none';
+                document.getElementById('downloadPdfBtn').style.display = 'block'; document.getElementById('rematchBtn').style.display = 'block';
+            }
+        }
+
+        function disableActionButtons(disabled) { document.querySelectorAll('.ballRunBtn, .extraBtn, #wicketBtn').forEach(b => b.disabled = disabled); }
         document.getElementById('setupMatchBtn').onclick = setupMatch;
-        document.querySelectorAll('.ballRunBtn').forEach(b => b.onclick = () => handleBall(parseInt(b.dataset.run)));
+        document.querySelectorAll('.ballRunBtn').forEach(btn => btn.onclick = () => handleBall(parseInt(btn.dataset.run)));
         document.getElementById('wideBtn').onclick = () => handleExtra('W'); document.getElementById('noBallBtn').onclick = () => handleExtra('NB');
-        document.getElementById('wicketBtn').onclick = () => handleBall(0, true); document.getElementById('endOverBtn').onclick = endOver;
+        document.getElementById('byeLbBtn').onclick = handleByeLegBye; document.getElementById('wicketBtn').onclick = () => handleBall(0, true);
+        document.getElementById('endOverBtn').onclick = endOver;
+
     </script>
 </body>
 </html>
