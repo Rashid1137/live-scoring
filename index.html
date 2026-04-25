@@ -43,6 +43,16 @@
         .menu-card h3 { font-size: 1.3em; margin-bottom: 5px; color: #fff; }
         .menu-card span { font-size: 0.9em; color: #94a3b8; }
 
+        /* LIVE MATCH CARD ANIMATION */
+        @keyframes livePulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.7; text-shadow: 0 0 15px #ef4444; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .menu-card.live-match i { color: #ef4444; animation: livePulse 1.5s infinite; }
+        .menu-card.live-match { border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.05);}
+        .menu-card.live-match:hover { border-color: #ef4444; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.1);}
+
         .back-btn-container { width: 100%; padding: 15px 20px; text-align: left; position: absolute; top: 0; left: 0; z-index: 100;}
         .back-btn { background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px 15px; font-weight: 500; border-radius: 5px; cursor: pointer; backdrop-filter: blur(5px); display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 14px;}
         .back-btn:hover { background: #dc2626; border-color: #dc2626; }
@@ -171,10 +181,16 @@
         <p>Tournament Management Dashboard</p>
 
         <div class="menu-grid">
+            <div class="menu-card live-match" onclick="window.location.href='?mode=viewer'">
+                <i class="fas fa-satellite-dish"></i>
+                <h3>Live Match</h3>
+                <span>Watch Live Score & Updates</span>
+            </div>
+
             <div class="menu-card scoring" onclick="openView('scoringView')">
                 <i class="fas fa-chart-line"></i>
                 <h3>Match Scoring</h3>
-                <span>Live Offline Scoreboard</span>
+                <span>Admin Scoreboard Panel</span>
             </div>
             
             <div class="menu-card player" onclick="openView('playerRegView')">
@@ -443,12 +459,13 @@
 
     <div id="scoringView" class="view-section">
         <div class="back-btn-container" style="position:relative; margin-bottom:10px; padding:0;">
-            <button class="back-btn" onclick="openView('homeMenu')" style="background:#05445E;"><i class="fas fa-arrow-left"></i> Home Menu</button>
+            <button class="back-btn" id="adminBackBtn" onclick="openView('homeMenu')" style="background:#05445E;"><i class="fas fa-arrow-left"></i> Home Menu</button>
         </div>
 
         <div class="scoring-container">
             <div id="animOverlay"><div class="anim-text" id="animText">OUT!</div></div>
-            <h1>Cricket Scoreboard Pro</h1>
+            
+            <h1 id="mainTitle">Cricket Scoreboard Pro</h1>
 
             <section class="section" id="setupSection">
                 <div style="text-align: center; margin-bottom: 20px;">
@@ -509,36 +526,36 @@
             <section class="section" id="matchSection" style="display:none;">
                 
                 <div id="viewerHistoryBtnArea" style="display:none; text-align:center; margin-bottom:15px;">
-                    <button onclick="toggleHistory()" style="background: linear-gradient(to right, #f59e0b, #d97706); border: none; color: white; font-weight: bold; padding: 10px 20px; border-radius: 8px; width: 100%;">📊 पुराने मैचों का रिकॉर्ड देखें</button>
-                    <div id="viewerHistoryContainer" style="display:none; margin-top:15px;"></div>
+                    <button onclick="toggleHistory()" style="background: linear-gradient(to right, #f59e0b, #d97706); border: none; color: white; font-weight: bold; padding: 10px 20px; border-radius: 8px; width: 100%; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);">📊 पुराने मैचों का रिकॉर्ड</button>
+                    <div id="viewerHistoryContainer" style="display:none; margin-top:15px; text-align:left;"></div>
                 </div>
 
                 <div class="score-summary">
                     <span id="displayBatTeam">Team</span>: <span id="totalRuns">0</span>/<span id="totalWickets">0</span> 
-                    <br><small>Over: <span id="currentOver">0.0</span> / <span id="displayMaxOvers">0</span> | Extras: <span id="extrasTotal">0</span> | <span style="color:#D72631; font-weight:bold;">CRR: <span id="crrDisplay">0.00</span></span></small>
+                    <br><small>Over: <span id="currentOver">0.0</span> / <span id="displayMaxOvers">0</span> | Extras: <span id="extrasTotal">0</span> | <span style="color:#D72631; font-weight:bold;" class="viewer-crr">CRR: <span id="crrDisplay">0.00</span></span></small>
                 </div>
                 
                 <div id="targetDiv" style="display:none;">लक्ष्य (Target): <span id="targetRuns">0</span></div>
 
                 <div class="flex-row section" id="livePlayerStats" style="margin-top:0;">
                     <div class="flex50">
-                        <div style="margin-bottom: 8px;">
-                            <span class="strike-label">🏏 Striker:</span> <span id="strikerName"></span>
+                        <div style="margin-bottom: 8px; font-size:1.1em;">
+                            <span class="strike-label">🏏 Striker:</span> <span id="strikerName" style="font-weight:bold;"></span>
                             <button class="edit-btn" onclick="openSelectorModal('changeStriker')">बदलें</button>
                         </div>
-                        <div style="margin-bottom: 8px;">
+                        <div style="margin-bottom: 8px; font-size:1.1em;">
                             <span class="strike-label">🏃 Non-Striker:</span> <span id="nonStrikerName"></span>
                             <button class="edit-btn" onclick="openSelectorModal('changeNonStriker')">बदलें</button>
                         </div>
                         <button class="swap-btn" onclick="manualSwitchStrike()" style="margin-top:5px;">Swap Strike ⇄</button>
                     </div>
-                    <div class="flex50">
-                        <label>वर्तमान गेंदबाज (Bowler):</label>
-                        <div style="font-size: 1.2em; font-weight: bold; color: #D72631;">
+                    <div class="flex50" style="border-left: 2px solid rgba(0,0,0,0.1); padding-left:10px;">
+                        <label style="margin-top:0;">वर्तमान गेंदबाज (Bowler):</label>
+                        <div style="font-size: 1.3em; font-weight: bold; color: #D72631;" id="liveBowlerNameHighlight">
                             <span id="currentBowlerDisplay"></span>
                             <button class="edit-btn" onclick="openSelectorModal('nextBowler')">बदलें</button>
                         </div>
-                        <div style="font-size: 0.8em; color: #05445E; margin-top: 5px;">
+                        <div style="font-size: 0.9em; color: #05445E; margin-top: 5px; font-weight:600;">
                             स्पेल: <span id="liveBowlerSpell">0.0-0-0</span> | E/R: <span id="liveBowlerEco">0.00</span>
                         </div>
                     </div>
@@ -624,7 +641,7 @@
         const isViewer = urlParams.get('mode') === 'viewer';
 
         if(isViewer) {
-            // VIEWERS KE LIYE PREMIUM STYLISH DARK MODE CSS
+            // VIEWERS KE LIYE PREMIUM STYLISH DARK MODE CSS & COMPACT HISTORY
             const style = document.createElement('style');
             style.innerHTML = `
                 body { background: #0f172a !important; color: white !important; }
@@ -634,18 +651,34 @@
                 #viewerHistoryBtnArea { display: block !important; }
                 
                 h1, h2, h3 { color: #fbbf24 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
-                .score-summary { background: rgba(255, 255, 255, 0.1) !important; color: white !important; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
+                #mainTitle { font-size: 1.8em; }
+                .score-summary { background: rgba(255, 255, 255, 0.1) !important; color: white !important; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size:1.8em !important; padding:15px !important;}
                 .score-summary span { color: #fff !important; }
+                .viewer-crr { color: #f87171 !important; }
+                
                 .section { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255,255,255,0.1); color: white; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
-                table th { background: #1e3a8a !important; border-color: rgba(255,255,255,0.2); }
-                table td { border-color: rgba(255,255,255,0.2); color: #e2e8f0; }
+                
+                table th { background: #1e3a8a !important; border-color: rgba(255,255,255,0.2); font-size: 0.85em; }
+                table td { border-color: rgba(255,255,255,0.2); color: #e2e8f0; font-size: 0.9em; }
+                
                 .strike-label { color: #38bdf8 !important; }
-                #liveBowlerEco, #liveBowlerSpell { color: #cbd5e1 !important; }
+                #liveBowlerNameHighlight { color: #f87171 !important; }
+                #liveBowlerEco, #liveBowlerSpell { color: #94a3b8 !important; }
                 .highlight { background: rgba(56, 189, 248, 0.2) !important; border-left: 5px solid #38bdf8 !important; }
                 
+                /* COMPACT HISTORY PANEL STYLING */
                 #historyContainer, #fullScoreboard { background: rgba(0, 0, 0, 0.4) !important; color: white !important; border: 1px solid rgba(255,255,255,0.2) !important; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
                 #historyContainer *, #fullScoreboard * { color: #f8fafc !important; }
                 .past-score-table { background: rgba(255,255,255,0.05) !important; }
+                
+                #viewerHistoryContainer {
+                    max-height: 350px;
+                    overflow-y: auto;
+                    padding-right: 5px;
+                    border-radius: 10px;
+                }
+                #viewerHistoryContainer::-webkit-scrollbar { width: 5px; }
+                #viewerHistoryContainer::-webkit-scrollbar-thumb { background: #f59e0b; border-radius: 5px; }
             `;
             document.head.appendChild(style);
 
@@ -702,7 +735,7 @@
             document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
             const target = document.getElementById(viewId);
             target.style.display = (viewId === 'homeMenu') ? 'flex' : 'block';
-            if(viewId !== 'homeMenu' && viewId !== 'scoringView') target.style.display = 'flex'; // Forms use flex
+            if(viewId !== 'homeMenu' && viewId !== 'scoringView') target.style.display = 'flex';
             window.scrollTo(0, 0);
         }
 
@@ -789,7 +822,11 @@
         }
 
         window.onload = () => {
-            if(isViewer) return; 
+            if(isViewer) {
+                // Remove homeMenu immediately if loading in viewer mode directly
+                document.getElementById('homeMenu').style.display = 'none';
+                return; 
+            }
             updateOpenerSelectors();
             let savedLive = localStorage.getItem('liveMatchDataVPL');
             if(savedLive) {
@@ -1043,6 +1080,9 @@
             document.getElementById('totalWickets').textContent = batTeam.wickets;
             document.getElementById('currentOver').textContent = `${match.oversCompleted}.${match.ballsInOver}`;
             document.getElementById('extrasTotal').textContent = batTeam.extras;
+            
+            // 🔴 FIX: BOWLER NAAM UPDATE NAHI HONE WALI PROBLEM THEEK KI GAYI YAHAN 🔴
+            document.getElementById('currentBowlerDisplay').textContent = match.currentBowler;
             
             let currentTotalBalls = (match.oversCompleted * 6) + match.ballsInOver;
             let crr = currentTotalBalls > 0 ? ((batTeam.runs / currentTotalBalls) * 6).toFixed(2) : "0.00";
