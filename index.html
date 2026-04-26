@@ -43,7 +43,7 @@
         #playerRegView { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); justify-content: center; align-items: center; padding: 60px 20px 20px 20px; }
         #ownerRegView { background: linear-gradient(135deg, #121212 0%, #2c2c2c 100%); justify-content: center; align-items: center; padding: 60px 20px 20px 20px; }
         #teamRegView { background: linear-gradient(135deg, #e65c00 0%, #F9D423 100%); justify-content: center; align-items: center; padding: 60px 20px 20px 20px; }
-        .registration-card, .vip-card, .village-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 30px; width: 100%; max-width: 500px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); margin: 0 auto; color: #fff;}
+        .registration-card, .vip-card, .village-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 30px; width: 100%; max-width: 500px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); margin: 0 auto; color: #fff; box-sizing: border-box;}
         .vip-card { background: rgba(20, 20, 20, 0.85); border-color: #d4af37; max-width: 550px;}
         .village-card { background: #ffffff; color: #333; border-top: 8px solid #e65c00; max-width: 650px;}
         .header { text-align: center; margin-bottom: 25px; }
@@ -64,94 +64,111 @@
         .msg-success { color: #2ecc71; background: rgba(46, 204, 113, 0.1); border: 1px solid #2ecc71;}
         .msg-error { color: #e74c3c; background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c;}
 
-        /* ================= NEW: TOURNAMENT HUB CSS ================= */
+        /* ================= TOURNAMENT HUB CSS ================= */
         #tournamentHubView { background: #f8fafc; color: #1e293b; padding: 60px 20px 20px 20px; }
         .tourney-container { max-width: 1000px; margin: 0 auto; }
-        .tourney-header { text-align: center; color: #4338ca; margin-bottom: 20px; }
+        .tourney-header { text-align: center; color: #4338ca; margin-bottom: 20px; font-size: 1.8em; }
         .points-table-wrapper { background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); padding: 20px; margin-bottom: 20px; overflow-x: auto; }
         .tourney-table { width: 100%; border-collapse: collapse; text-align: center; min-width: 600px; }
         .tourney-table th { background: #4338ca; color: white; padding: 12px; font-weight: 600; text-transform: uppercase; font-size: 0.9em; }
-        .tourney-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; font-weight: 500; }
+        .tourney-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; font-weight: 500; font-size: 0.9em; }
         .tourney-table tr:hover { background: #f1f5f9; }
         .group-title { background: #e0e7ff; color: #4338ca; font-weight: bold; padding: 10px; border-radius: 5px; margin-top: 15px;}
         .add-team-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; gap: 10px; flex-wrap: wrap; align-items: center;}
-        .add-team-box input, .add-team-box select { padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; color: #1e293b; flex: 1; min-width: 150px; background:#fff;}
-        .add-team-box button { background: #4338ca; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;}
+        .add-team-box input, .add-team-box select { padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; color: #1e293b; flex: 1; min-width: 150px; background:#fff; box-sizing: border-box;}
+        .add-team-box button { background: #4338ca; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; flex: 1; min-width: 150px;}
 
-        /* ================= NEW: SCHEME MATCH CSS ================= */
+        /* ================= SCHEME MATCH CSS ================= */
         #schemeSetupView, #schemeScoringView { background: #111827; color: white; padding: 60px 20px 20px 20px; }
         .scheme-container { max-width: 800px; margin: 0 auto; }
-        .scheme-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .scheme-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
         .scheme-card h3 { color: #ec4899; text-align: center; border-bottom: 1px solid rgba(236,72,153,0.3); padding-bottom: 10px; margin-top: 0;}
         .scheme-input-row { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;}
         .scheme-input-row div { flex: 1; min-width: 200px;}
-        .scheme-card label { color: #9ca3af; font-size: 0.9em; }
-        .scheme-card input, .scheme-card select { background: rgba(0,0,0,0.3); border: 1px solid #4b5563; color: white; padding: 10px; width: 100%; border-radius: 5px; margin-top: 5px; box-sizing:border-box;}
+        .scheme-card label { color: #9ca3af; font-size: 0.9em; display:block; margin-bottom:5px; }
+        .scheme-card input, .scheme-card select { background: rgba(0,0,0,0.3); border: 1px solid #4b5563; color: white; padding: 10px; width: 100%; border-radius: 5px; box-sizing:border-box;}
         .scheme-btn { width: 100%; background: linear-gradient(to right, #ec4899, #8b5cf6); border: none; padding: 15px; color: white; font-weight: bold; font-size: 1.2em; border-radius: 8px; cursor: pointer; margin-top: 10px;}
         
-        .radio-group { display: flex; gap: 20px; margin-top: 10px; }
-        .radio-group label { display: flex; align-items: center; gap: 8px; font-size: 1em; color: #fff; cursor: pointer; }
+        .radio-group { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
+        .radio-group label { display: flex; align-items: center; gap: 8px; font-size: 0.95em; color: #fff; cursor: pointer; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border: 1px solid #4b5563; flex: 1; justify-content: center;}
         .radio-group input[type="radio"] { width: auto; margin: 0; }
 
         /* Scheme Scoring Specifics */
         .ss-score-board { text-align: center; background: rgba(0,0,0,0.4); border: 2px solid #ec4899; border-radius: 15px; padding: 20px; margin-bottom: 20px; }
         .ss-team-name { font-size: 1.5em; color: #f3f4f6; font-weight: bold; }
-        .ss-score { font-size: 3em; font-weight: 900; color: #ec4899; margin: 10px 0; text-shadow: 0 0 15px rgba(236,72,153,0.5);}
+        .ss-score { font-size: 3.5em; font-weight: 900; color: #ec4899; margin: 5px 0; text-shadow: 0 0 15px rgba(236,72,153,0.5);}
         .ss-target-box { background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 1.2em; margin-bottom: 15px; text-align: center; display: none;}
-        .ss-stats-row { display: flex; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1);}
-        .ss-player-stat { flex: 1; text-align: center; }
-        .ss-player-stat h4 { color: #9ca3af; margin: 0 0 5px 0; font-size: 0.9em; text-transform: uppercase;}
+        .ss-stats-row { display: flex; flex-wrap: wrap; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); gap: 10px;}
+        .ss-player-stat { flex: 1; text-align: center; min-width: 120px; }
+        .ss-player-stat h4 { color: #9ca3af; margin: 0 0 5px 0; font-size: 0.85em; text-transform: uppercase;}
         .ss-player-stat p { font-size: 1.2em; margin: 0; font-weight: bold; color: white;}
-        .ss-buttons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
-        .ss-btn { padding: 20px; font-size: 1.5em; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; transition: 0.2s; color: white;}
+        .ss-buttons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+        .ss-btn { padding: 18px 10px; font-size: 1.3em; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; transition: 0.2s; color: white; box-sizing: border-box;}
         .ss-btn:active { transform: scale(0.95); }
         .ss-btn-dot { background: #4b5563; } .ss-btn-4 { background: #3b82f6; } .ss-btn-6 { background: #8b5cf6; } .ss-btn-out { background: #ef4444; }
-        .ss-btn-extra { background: #f59e0b; padding: 15px; font-size: 1.2em;}
+        .ss-btn-extra { background: #f59e0b; padding: 12px; font-size: 1.1em;}
         
         /* ================= PREMIUM SCOREBOARD STYLES ================= */
-        .fsb-title { color: #05445E; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800;}
-        .fsb-inning-card { background: linear-gradient(145deg, #ffffff, #f0f4f8); padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border: 1px solid #e1e8ed; }
-        .fsb-inning-title { margin: 0 0 15px 0; color: #189AB4; font-size: 1.3em; font-weight: 700; border-bottom: 2px solid #75E6DA; padding-bottom: 8px;}
-        .fsb-table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; color: #222; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);}
-        .fsb-table th { background: #05445E; color: white; padding: 10px; font-weight: 600; text-transform: uppercase; font-size: 0.9em; letter-spacing: 0.5px;}
-        .fsb-table td { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.95em;}
+        .fsb-title { color: #05445E; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; font-size: 1.4em;}
+        .fsb-inning-card { background: linear-gradient(145deg, #ffffff, #f0f4f8); padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border: 1px solid #e1e8ed; }
+        .fsb-inning-title { margin: 0 0 12px 0; color: #189AB4; font-size: 1.2em; font-weight: 700; border-bottom: 2px solid #75E6DA; padding-bottom: 8px;}
+        .fsb-table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; color: #222; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); min-width: 450px;}
+        .fsb-table th { background: #05445E; color: white; padding: 10px 5px; font-weight: 600; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px;}
+        .fsb-table td { padding: 8px 5px; border-bottom: 1px solid #eee; font-size: 0.9em;}
         .fsb-table tbody tr:hover { background: #f8fafc; }
-        .fsb-bowl-title { margin: 15px 0 10px 0; color: #d35400; font-size: 1.1em; font-weight: 700; text-transform: uppercase;}
+        .fsb-bowl-title { margin: 15px 0 10px 0; color: #d35400; font-size: 1.05em; font-weight: 700; text-transform: uppercase;}
         .fsb-bowl-header th { background: #d35400; }
 
         /* ================= SCORING APP CSS ================= */
         #scoringView { background: #f0f4f8; color: #222; padding: 60px 20px 20px 20px; }
         .scoring-container { max-width: 900px; margin: 0 auto; }
         #scoringView h1, #scoringView h2, #scoringView h3 { text-align: center; color: #05445E; }
-        #scoringView label { display: block; margin: 0.4em 0 0.2em 0; font-weight: 600; color: #189AB4; }
-        #scoringView input[type="text"], #scoringView input[type="number"], #scoringView textarea, #scoringView select { width: 100%; padding: 10px; font-size: 16px; border: 2px solid #75E6DA; border-radius: 5px; background: #fff; box-sizing: border-box;}
-        #scoringView button { background: #189AB4; color: white; border: none; padding: 12px 20px; margin: 10px 5px; font-weight: 600; font-size: 1.1em; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 7px rgba(24, 154, 180, 0.4); }
+        #scoringView label { display: block; margin: 0.4em 0 0.2em 0; font-weight: 600; color: #189AB4; font-size: 0.95em;}
+        #scoringView input[type="text"], #scoringView input[type="number"], #scoringView textarea, #scoringView select { width: 100%; padding: 10px; font-size: 15px; border: 2px solid #75E6DA; border-radius: 5px; background: #fff; box-sizing: border-box;}
+        #scoringView button { background: #189AB4; color: white; border: none; padding: 12px 15px; margin: 5px 2px; font-weight: 600; font-size: 1em; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 7px rgba(24, 154, 180, 0.4); }
         #scoringView button:disabled { background: #c0d9df; cursor: not-allowed; box-shadow: none; transform: none; }
         .flex-row { display: flex; gap: 1em; flex-wrap: wrap; justify-content: space-between; }
-        .flex50 { flex: 1 1 48%; min-width: 300px;}
-        .section { background: white; border-radius: 10px; padding: 15px 20px; margin-top: 20px; box-shadow: 0 5px 12px rgba(0,0,0,0.1); }
-        .table-responsive { overflow-x: auto; width: 100%; }
-        #scoringView table { width: 100%; border-collapse: collapse; margin-top: 0.8em; text-align: center; min-width: 500px; font-size: 0.9em;}
+        .flex50 { flex: 1 1 100%; min-width: 250px;}
+        .section { background: white; border-radius: 10px; padding: 15px; margin-top: 20px; box-shadow: 0 5px 12px rgba(0,0,0,0.1); }
+        .table-responsive { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
+        #scoringView table { width: 100%; border-collapse: collapse; margin-top: 0.8em; text-align: center; min-width: 500px; font-size: 0.85em;}
         #scoringView th, #scoringView td { border: 1px solid #ddd; padding: 8px 5px; }
         #scoringView th { background: #189AB4; color: white; }
-        .highlight { background: #d0f0fd; border-left: 5px solid #05445E; font-weight: bold;}
-        .score-summary { font-size: 1.5em; margin: 15px 0; font-weight: 700; color: #05445E; text-align: center; background: #e0f7fa; padding: 10px; border-radius: 8px;}
+        .highlight { background: #d0f0fd; border-left: 4px solid #05445E; font-weight: bold;}
+        .score-summary { font-size: 1.4em; margin: 15px 0; font-weight: 700; color: #05445E; text-align: center; background: #e0f7fa; padding: 12px 5px; border-radius: 8px;}
         #targetDiv { font-size: 1.2em; color: #D72631; text-align: center; font-weight: bold; margin-bottom: 10px;}
-        #resultText { font-size: 1.5em; font-weight: 800; text-align: center; color: #fff; background: #0B6623; margin-top: 15px; padding: 15px; border-radius: 10px; display:none;}
-        .strike-label { font-weight: 700; color: #189AB4; }
-        .swap-btn { background: #75E6DA; color: #05445E; font-size: 0.9em; padding: 5px 10px; }
-        .edit-btn { font-size: 0.7em; padding: 4px 10px; margin-left: 10px; background: #f39c12; color: white; border-radius: 4px; border:none; cursor:pointer;}
-        #fullScoreboard { background: transparent; padding: 20px 0; border-radius: 10px; margin-top: 20px; display: none;}
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 9999; }
-        .modal-content { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .modal-input { margin-bottom: 15px; width: 100%; padding: 10px; font-size: 16px; border: 2px solid #05445E; border-radius: 5px; background: #fff;}
+        #resultText { font-size: 1.3em; font-weight: 800; text-align: center; color: #fff; background: #0B6623; margin-top: 15px; padding: 15px; border-radius: 10px; display:none;}
+        .strike-label { font-weight: 700; color: #189AB4; font-size: 0.95em;}
+        .swap-btn { background: #75E6DA; color: #05445E; font-size: 0.85em; padding: 6px 10px; }
+        .edit-btn { font-size: 0.75em; padding: 4px 8px; margin-left: 5px; background: #f39c12; color: white; border-radius: 4px; border:none; cursor:pointer;}
+        #fullScoreboard { background: transparent; padding: 15px 0; border-radius: 10px; margin-top: 20px; display: none;}
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 9999; padding: 10px; box-sizing: border-box;}
+        .modal-content { background: white; padding: 20px; border-radius: 10px; width: 100%; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .modal-input { margin-bottom: 15px; width: 100%; padding: 10px; font-size: 15px; border: 2px solid #05445E; border-radius: 5px; background: #fff; box-sizing: border-box;}
         #animOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 10000; flex-direction: column; }
-        .anim-text { font-size: 5em; font-weight: 900; color: white; text-shadow: 2px 2px 10px #000; animation: popAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; text-align: center;}
+        .anim-text { font-size: 4em; font-weight: 900; color: white; text-shadow: 2px 2px 10px #000; animation: popAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; text-align: center;}
         @keyframes popAnim { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        .past-score-table { width: 100%; font-size: 0.8em; margin-top: 10px; display: none; background: #f0f4f8; border-radius: 5px; padding: 10px; overflow-x: auto;}
-        .motm-box { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #fff; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; font-size: 1.2em; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.2); border: 2px solid #fff;}
-        .motm-name { font-size: 1.5em; color: #fff; text-shadow: 1px 1px 2px #000; display: block; margin: 5px 0;}
-        .motm-stats { font-size: 0.8em; color: #fff; font-weight: normal;}
+        .past-score-table { width: 100%; font-size: 0.8em; margin-top: 10px; display: none; background: #f0f4f8; border-radius: 5px; padding: 10px; overflow-x: auto; box-sizing: border-box;}
+        .motm-box { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #fff; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; font-size: 1.1em; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.2); border: 2px solid #fff;}
+        .motm-name { font-size: 1.4em; color: #fff; text-shadow: 1px 1px 2px #000; display: block; margin: 5px 0;}
+        .motm-stats { font-size: 0.85em; color: #fff; font-weight: normal;}
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (min-width: 768px) {
+            .flex50 { flex: 1 1 48%; }
+        }
+        @media (max-width: 600px) {
+            .view-section { padding: 70px 15px 20px 15px; }
+            #homeMenu { padding: 15px; }
+            #homeMenu h1 { font-size: 2em; }
+            .menu-grid { grid-template-columns: 1fr; gap: 15px;}
+            .ss-score { font-size: 2.8em; }
+            .ss-btn { font-size: 1.1em; padding: 15px 5px; }
+            .ss-btn-extra { font-size: 1em; padding: 10px; }
+            .tourney-header { font-size: 1.4em; }
+            #livePlayerStats { flex-direction: column; gap: 15px; }
+            #livePlayerStats .flex50 { border-left: none; padding-left: 0; border-top: 1px solid #ddd; padding-top: 10px;}
+        }
 
         @media print {
             body { background: white; margin: 0; padding: 0; }
@@ -175,7 +192,7 @@
         <h1>Village Premier League</h1>
         <p>Tournament Management Dashboard</p>
 
-        <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 30px; backdrop-filter: blur(10px); max-width: 400px; width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 30px; backdrop-filter: blur(10px); max-width: 400px; width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); box-sizing: border-box;">
             <p style="margin: 0 0 5px 0; color: #94a3b8; font-size: 0.95em;"><i class="fas fa-headset"></i> App ki jankari ke liye contact karein:</p>
             <h3 style="margin: 0; color: #38bdf8; font-size: 1.2em; font-weight: 600;">Rashid Hussain</h3>
             <p style="margin: 5px 0 0 0; color: #fff; font-size: 1.1em; letter-spacing: 1px;"><i class="fas fa-phone-alt" style="color: #4ade80;"></i> 9720110030</p>
@@ -205,9 +222,7 @@
     </div>
 
     <div id="tournamentHubView" class="view-section">
-        <div class="back-btn-container" style="position:relative; margin-bottom:10px; padding:0;">
-            <button class="back-btn" onclick="openView('homeMenu')" style="background:#4338ca;"><i class="fas fa-arrow-left"></i> Home</button>
-        </div>
+        <div class="back-btn-container"><button class="back-btn" onclick="openView('homeMenu')" style="background:#4338ca;"><i class="fas fa-arrow-left"></i> Home</button></div>
         <div class="tourney-container">
             <h1 class="tourney-header"><i class="fas fa-trophy"></i> Birpur Village Tournament Hub</h1>
             
@@ -223,7 +238,7 @@
             <div class="points-table-wrapper">
                 <h3 style="color:#1e293b; margin-top:0;">Points Table</h3>
                 <div id="pointsTableContainer"></div>
-                <div style="margin-top:15px; font-size:0.8em; color:#64748b;">
+                <div style="margin-top:15px; font-size:0.85em; color:#64748b; line-height:1.4;">
                     * <i>Match khatam hote hi agar naam match hua toh Points Table automatic update hogi. Aap manual edit bhi kar sakte hain.</i>
                 </div>
             </div>
@@ -231,12 +246,10 @@
     </div>
 
     <div id="schemeSetupView" class="view-section">
-        <div class="back-btn-container" style="position:relative; margin-bottom:10px; padding:0;">
-            <button class="back-btn" onclick="openView('homeMenu')" style="background:#ec4899;"><i class="fas fa-arrow-left"></i> Home</button>
-        </div>
+        <div class="back-btn-container"><button class="back-btn" onclick="openView('homeMenu')" style="background:#ec4899;"><i class="fas fa-arrow-left"></i> Home</button></div>
         <div class="scheme-container">
-            <h1 style="text-align:center; color:#ec4899;"><i class="fas fa-bolt"></i> Scheme Match Setup</h1>
-            <p style="text-align:center; color:#9ca3af; margin-top:-10px; margin-bottom:30px;">(Only Boundary Runs | Cross Scheme System)</p>
+            <h1 style="text-align:center; color:#ec4899; font-size:1.8em;"><i class="fas fa-bolt"></i> Scheme Match Setup</h1>
+            <p style="text-align:center; color:#9ca3af; margin-top:-10px; margin-bottom:20px; font-size:0.9em;">(Only Boundaries | Extra=0 Runs | No Free Hit)</p>
             
             <div class="scheme-card">
                 <h3>Match Rules & Mode</h3>
@@ -249,7 +262,7 @@
                     <label><input type="radio" name="ss_matchMode" value="2in" checked onclick="toggleSchemeMode()"> Normal (2 Innings)</label>
                     <label><input type="radio" name="ss_matchMode" value="1in" onclick="toggleSchemeMode()"> Fixed Target (1 Inning)</label>
                 </div>
-                <div id="ss_fixedTargetDiv" style="display:none;">
+                <div id="ss_fixedTargetDiv" style="display:none; margin-top:10px;">
                     <label>Kitne Run Ka Target Hai?</label>
                     <input type="number" id="ss_fixedTarget" placeholder="Jaise: 150">
                 </div>
@@ -282,21 +295,17 @@
     </div>
 
     <div id="schemeScoringView" class="view-section">
-        <div class="back-btn-container" style="position:relative; margin-bottom:10px; padding:0;">
-            <button class="back-btn" onclick="openView('homeMenu')" style="background:#ec4899;"><i class="fas fa-arrow-left"></i> Home</button>
-        </div>
+        <div class="back-btn-container"><button class="back-btn" onclick="openView('homeMenu')" style="background:#ec4899;"><i class="fas fa-arrow-left"></i> Home</button></div>
         <div class="scheme-container" style="max-width: 600px;">
-            <div id="ss_animOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:none; justify-content:center; align-items:center; z-index:9999;">
-                <div id="ss_animText" style="font-size: 5em; font-weight: 900; color: white; text-shadow: 2px 2px 10px #000;"></div>
-            </div>
+            <div id="ss_animOverlay"><div class="anim-text" id="ss_animText">Scheme Game</div></div>
 
             <div class="ss-target-box" id="ss_targetDisplay">Target: <span id="ss_targetRuns">0</span> Runs in <span id="ss_targetOvers"></span> Overs</div>
 
             <div class="ss-score-board">
                 <div class="ss-team-name" id="ss_battingTeamName">Team A Batting</div>
                 <div class="ss-score"><span id="ss_runs">0</span>/<span id="ss_wickets">0</span></div>
-                <div style="color:#9ca3af; font-size:1.2em;">Overs: <span id="ss_overs" style="color:white; font-weight:bold;">0.0</span> / <span id="ss_maxOvers">5</span></div>
-                <div style="color:#ec4899; font-size:0.9em; margin-top:5px;">[Only Boundaries Count | No Free Hit]</div>
+                <div style="color:#9ca3af; font-size:1.1em;">Overs: <span id="ss_overs" style="color:white; font-weight:bold;">0.0</span> / <span id="ss_maxOvers">5</span></div>
+                <div style="color:#ec4899; font-size:0.85em; margin-top:5px;">[0 Runs on Wides/No Balls | No Free Hit]</div>
             </div>
 
             <div class="ss-stats-row">
@@ -317,19 +326,18 @@
                     <button class="ss-btn ss-btn-4" onclick="handleSchemeBall(4)">4 (Four)</button>
                     <button class="ss-btn ss-btn-6" onclick="handleSchemeBall(6)">6 (Six)</button>
                 </div>
-                <div style="display:flex; gap:15px; margin-bottom:20px;">
-                    <button class="ss-btn ss-btn-extra" style="flex:1;" onclick="handleSchemeExtra('WD')">Wide (1 Run)</button>
-                    <button class="ss-btn ss-btn-extra" style="flex:1;" onclick="handleSchemeExtra('NB')">No Ball (1 Run)</button>
+                <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+                    <button class="ss-btn ss-btn-extra" style="flex:1; min-width:120px;" onclick="handleSchemeExtra('WD')">Wide (0 Run)</button>
+                    <button class="ss-btn ss-btn-extra" style="flex:1; min-width:120px;" onclick="handleSchemeExtra('NB')">No Ball (0 Run)</button>
                 </div>
                 <button class="ss-btn" style="width:100%; background:#10b981; margin-bottom:15px;" id="ss_inningBtn" onclick="endSchemeInning()" style="display:none;">Dusri Paari Shuru Karein</button>
             </div>
 
-            <div id="ss_resultText" style="display:none; background:#10b981; padding:20px; border-radius:10px; text-align:center; font-size:1.5em; font-weight:bold; color:white; margin-bottom:20px;"></div>
+            <div id="ss_resultText" style="display:none; background:#10b981; padding:15px; border-radius:10px; text-align:center; font-size:1.3em; font-weight:bold; color:white; margin-bottom:20px;"></div>
             
-            <button class="ss-btn" style="width:100%; background:#4b5563;" onclick="undoSchemeLast()">↩ Undo Mistake</button>
+            <button class="ss-btn" style="width:100%; background:#4b5563; font-size: 1.1em; padding: 12px;" onclick="undoSchemeLast()">↩ Undo Mistake</button>
         </div>
     </div>
-
 
     <div id="playerRegView" class="view-section">
         <div class="back-btn-container"><button class="back-btn" onclick="openView('homeMenu')"><i class="fas fa-arrow-left"></i> Home Menu</button></div>
@@ -389,15 +397,13 @@
     </div>
 
     <div id="scoringView" class="view-section">
-        <div class="back-btn-container" style="position:relative; margin-bottom:10px; padding:0;">
-            <button class="back-btn" id="adminBackBtn" onclick="openView('homeMenu')" style="background:#05445E;"><i class="fas fa-arrow-left"></i> Home</button>
-        </div>
+        <div class="back-btn-container"><button class="back-btn" id="adminBackBtn" onclick="openView('homeMenu')" style="background:#05445E;"><i class="fas fa-arrow-left"></i> Home</button></div>
         <div class="scoring-container">
-            <div id="animOverlay"><div class="anim-text" id="animText">OUT!</div></div>
+            <div id="animOverlay"><div class="anim-text" id="animText">Scheme Game</div></div>
             <h1 id="mainTitle">Cricket Scoreboard Pro</h1>
             <section class="section" id="setupSection">
                 <div style="text-align: center; margin-bottom: 20px;">
-                    <img src="rashid_photo.jpg" alt="Rashid Hussain" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #189AB4; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" onerror="this.src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'">
+                    <img src="rashid_photo.jpg" alt="Rashid Hussain" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid #189AB4; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" onerror="this.src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'">
                     <h3 style="margin: 5px 0 0 0; color: #05445E;">Rashid Hussain</h3>
                 </div>
                 <button id="showHistoryBtn" onclick="toggleHistory()" style="background:#f39c12; width:100%; margin-bottom: 15px; box-shadow: none;">📊 पिछले मैचों का रिकॉर्ड</button>
@@ -408,8 +414,8 @@
                     <div class="flex-row"><div class="flex50"><label>कुल ओवर (Total Overs):</label><input type="number" id="totalOversInput" value="5" min="1" /></div></div>
                 </div>
                 <div class="flex-row">
-                    <div class="flex50"><label>टीम 1:</label><input type="text" id="team1Name" value="Team Alpha" /><label>खिलाड़ी (Comma sep):</label><textarea id="team1Players" rows="3" onchange="updateOpenerSelectors()">A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11</textarea></div>
-                    <div class="flex50"><label>टीम 2:</label><input type="text" id="team2Name" value="Team Bravo" /><label>खिलाड़ी (Comma sep):</label><textarea id="team2Players" rows="3" onchange="updateOpenerSelectors()">B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11</textarea></div>
+                    <div class="flex50"><label>टीम 1:</label><input type="text" id="team1Name" value="Team Alpha" /><label>खिलाड़ी (Comma sep):</label><textarea id="team1Players" rows="2" onchange="updateOpenerSelectors()">A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11</textarea></div>
+                    <div class="flex50"><label>टीम 2:</label><input type="text" id="team2Name" value="Team Bravo" /><label>खिलाड़ी (Comma sep):</label><textarea id="team2Players" rows="2" onchange="updateOpenerSelectors()">B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11</textarea></div>
                 </div>
                 <div class="section" style="background: #f9f9f9;">
                     <h3>ओपनिंग खिलाड़ी चुनें</h3>
@@ -435,12 +441,12 @@
                     </div>
                     <div class="flex50" style="border-left: 2px solid rgba(0,0,0,0.1); padding-left:10px;">
                         <label style="margin-top:0;">वर्तमान गेंदबाज:</label>
-                        <div style="font-size: 1.3em; font-weight: bold; color: #D72631;" id="liveBowlerNameHighlight"><span id="currentBowlerDisplay"></span> <button class="edit-btn" onclick="openSelectorModal('nextBowler')">बदलें</button></div>
+                        <div style="font-size: 1.2em; font-weight: bold; color: #D72631;" id="liveBowlerNameHighlight"><span id="currentBowlerDisplay"></span> <button class="edit-btn" onclick="openSelectorModal('nextBowler')">बदलें</button></div>
                         <div style="font-size: 0.9em; color: #05445E; margin-top: 5px;">स्पेल: <span id="liveBowlerSpell">0.0-0-0</span> | E/R: <span id="liveBowlerEco">0.00</span></div>
                     </div>
                 </div>
 
-                <div style="text-align: right; margin-top: 15px;"><button id="undoBtn" onclick="undoLastAction()" style="background:#e74c3c; padding: 8px 15px; font-size: 0.9em; box-shadow:none; border-radius:4px;" disabled>↩ Undo</button></div>
+                <div style="text-align: right; margin-top: 15px;"><button id="undoBtn" onclick="undoLastAction()" style="background:#e74c3c; padding: 8px 15px; font-size: 0.85em; box-shadow:none; border-radius:4px;" disabled>↩ Undo</button></div>
 
                 <div class="section" id="scoringZone" style="text-align:center; margin-top:5px;">
                     <h3>Run Buttons</h3>
@@ -492,19 +498,20 @@
             const style = document.createElement('style');
             style.innerHTML = `
                 body { background: #0f172a !important; color: white !important; }
-                #scoringZone, #setupSection, #undoBtn, .edit-btn, .swap-btn, #endOverBtn, #startSecondInningsBtn, #rematchBtn, .back-btn-container, #homeMenu { display: none !important; }
+                #scoringZone, #setupSection, #undoBtn, .edit-btn, .swap-btn, #endOverBtn, #startSecondInningsBtn, #rematchBtn, .back-btn-container, #homeMenu, #ss_scoringZone, #schemeSetupView { display: none !important; }
                 #scoringView { display: block !important; padding: 20px 10px; background: transparent; }
                 #matchSection { display: block !important; margin-top: 10px; }
                 #viewerHistoryBtnArea { display: block !important; }
+                #schemeScoringView { background: transparent !important; padding: 20px 10px !important; }
                 h1, h2, h3 { color: #fbbf24 !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
                 #mainTitle { font-size: 1.8em; }
-                .score-summary { background: rgba(255, 255, 255, 0.1) !important; color: white !important; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size:1.8em !important; padding:15px !important;}
+                .score-summary { background: rgba(255, 255, 255, 0.1) !important; color: white !important; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size:1.6em !important; padding:15px !important;}
                 .score-summary span { color: #fff !important; } .viewer-crr { color: #f87171 !important; }
                 .section { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255,255,255,0.1); color: white; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
                 table th { background: #1e3a8a !important; border-color: rgba(255,255,255,0.2); font-size: 0.85em; }
                 table td { border-color: rgba(255,255,255,0.2); color: #e2e8f0; font-size: 0.9em; }
                 .strike-label { color: #38bdf8 !important; } #liveBowlerNameHighlight { color: #f87171 !important; } #liveBowlerEco, #liveBowlerSpell { color: #94a3b8 !important; }
-                .highlight { background: rgba(56, 189, 248, 0.2) !important; border-left: 5px solid #38bdf8 !important; }
+                .highlight { background: rgba(56, 189, 248, 0.2) !important; border-left: 4px solid #38bdf8 !important; }
                 #historyContainer, #fullScoreboard { background: rgba(0, 0, 0, 0.4) !important; color: white !important; border: 1px solid rgba(255,255,255,0.2) !important; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
                 #historyContainer *, #fullScoreboard * { color: #f8fafc !important; } .past-score-table { background: rgba(255,255,255,0.05) !important; }
                 #viewerHistoryContainer { max-height: 350px; overflow-y: auto; padding-right: 5px; border-radius: 10px; }
@@ -533,17 +540,40 @@
             db.ref('VillagePremierLeague/LiveMatch').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if(data) {
-                    match = data.match; teams = data.teams;
-                    let cBat = match.battingTeam; let cR = teams[cBat].runs; let cW = teams[cBat].wickets;
-                    if(prevRuns !== -1 && prevBatTeam === cBat && !match.matchFinished) {
-                        let diff = cR - prevRuns;
-                        if(diff === 4) triggerAnim(4); if(diff === 6) triggerAnim(6); if(cW > prevWickets) triggerAnim('W');
-                    }
-                    prevRuns = cR; prevWickets = cW; prevBatTeam = cBat;
-                    if(match.matchFinished) finishMatch(); 
-                    else {
-                        if(match.innings === 2) { document.getElementById('targetDiv').style.display = 'block'; document.getElementById('targetRuns').textContent = match.target; }
-                        updateUI(true);
+                    if(data.matchType === 'scheme') {
+                        document.getElementById('scoringView').style.display = 'none';
+                        document.getElementById('schemeScoringView').style.display = 'block';
+                        sMatch = data.sMatch;
+                        
+                        let cBat = sMatch.innings === 1 ? sMatch.t1 : sMatch.t2;
+                        let cR = cBat.runs; let cW = cBat.wkts;
+                        if(prevRuns !== -1 && prevBatTeam === cBat.name && !sMatch.isComplete) {
+                            let diff = cR - prevRuns;
+                            if(diff === 4) ss_anim("FOUR!", "#3b82f6"); 
+                            if(diff === 6) ss_anim("SIX!", "#8b5cf6"); 
+                            if(cW > prevWickets) ss_anim("WICKET", "#ef4444");
+                        }
+                        prevRuns = cR; prevWickets = cW; prevBatTeam = cBat.name;
+
+                        updateSchemeUI(true);
+                    } else {
+                        document.getElementById('schemeScoringView').style.display = 'none';
+                        document.getElementById('scoringView').style.display = 'block';
+                        document.getElementById('setupSection').style.display = 'none';
+                        document.getElementById('matchSection').style.display = 'block';
+                        
+                        match = data.match; teams = data.teams;
+                        let cBat = match.battingTeam; let cR = teams[cBat].runs; let cW = teams[cBat].wickets;
+                        if(prevRuns !== -1 && prevBatTeam === cBat && !match.matchFinished) {
+                            let diff = cR - prevRuns;
+                            if(diff === 4) triggerAnim(4); if(diff === 6) triggerAnim(6); if(cW > prevWickets) triggerAnim('W');
+                        }
+                        prevRuns = cR; prevWickets = cW; prevBatTeam = cBat;
+                        if(match.matchFinished) finishMatch(); 
+                        else {
+                            if(match.innings === 2) { document.getElementById('targetDiv').style.display = 'block'; document.getElementById('targetRuns').textContent = match.target; }
+                            updateUI(true);
+                        }
                     }
                 }
             });
@@ -665,7 +695,7 @@
         }
 
         // ==========================================
-        // SCHEME MATCH LOGIC (Fixed Target Added)
+        // SCHEME MATCH LOGIC (0 Runs on Extras)
         // ==========================================
         let sMatch = { innings: 1, target: 0, isComplete: false };
         let sState = []; 
@@ -725,7 +755,13 @@
             }
         }
 
-        function updateSchemeUI() {
+        function saveSchemeLiveMatch() {
+            if (typeof isViewer !== 'undefined' && !isViewer && window.db) {
+                db.ref('VillagePremierLeague/LiveMatch').set({ matchType: 'scheme', sMatch: sMatch });
+            }
+        }
+
+        function updateSchemeUI(isFromFb = false) {
             let curT = sMatch.innings === 1 ? sMatch.t1 : sMatch.t2;
             let oppT = sMatch.innings === 1 ? sMatch.t2 : sMatch.t1;
             
@@ -752,6 +788,7 @@
                     else finishSchemeMatch((sMatch.mode==='1in' ? "Target Defended! " : oppT.name) + " WON!");
                 }
             }
+            if(!isFromFb) saveSchemeLiveMatch();
         }
 
         function ss_anim(txt, color) {
@@ -770,7 +807,12 @@
         function handleSchemeExtra(type) {
             let curT = sMatch.innings === 1 ? sMatch.t1 : sMatch.t2;
             if(Math.floor(curT.balls/6) >= sMatch.maxOvers || curT.wkts >= sMatch.maxWickets || sMatch.isComplete) return;
-            saveSchemeState(); curT.runs += 1; ss_anim(type, "#f59e0b"); updateSchemeUI();
+            
+            saveSchemeState(); 
+            // 0 Runs added, Ball does not count (re-bowled), No Free Hit.
+            curT.runs += 0; 
+            ss_anim(type === 'WD' ? "WIDE" : "NO BALL", "#f59e0b"); 
+            updateSchemeUI();
         }
 
         function endSchemeInning() {
@@ -785,6 +827,7 @@
             let rBox = document.getElementById('ss_resultText'); rBox.style.display = 'block';
             let t1s = sMatch.mode==='1in' ? `Target Setter: ${sMatch.target} Runs` : `T1 (${sMatch.t1.name}): ${sMatch.t1.runs}/${sMatch.t1.wkts}`;
             rBox.innerHTML = `🏆 ${result} <br><br> <small style='font-size:0.6em; color:#e5e7eb;'>${t1s} <br> Chaser (${sMatch.t2.name}): ${sMatch.t2.runs}/${sMatch.t2.wkts}</small>`;
+            saveSchemeLiveMatch();
         }
 
         // ==========================================
@@ -805,7 +848,7 @@
         function saveLiveMatch() {
             localStorage.setItem('liveMatchDataVPL', JSON.stringify({match: match, teams: teams, historyStack: historyStack}));
             if (typeof isViewer !== 'undefined' && !isViewer && window.db) {
-                db.ref('VillagePremierLeague/LiveMatch').set({match: match, teams: teams});
+                db.ref('VillagePremierLeague/LiveMatch').set({matchType: 'standard', match: match, teams: teams});
             }
         }
         function startNewMatchClear() { localStorage.removeItem('liveMatchDataVPL'); location.reload(); }
