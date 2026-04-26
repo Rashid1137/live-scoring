@@ -13,48 +13,55 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600;700&family=Mukta:wght@400;600;700&display=swap');
 
-        /* ================= GLOBAL & HOME MENU CSS ================= */
-        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: #0f172a; overflow-x: hidden;}
-        .view-section { display: none; min-height: 100vh; width: 100%; }
+        /* ================= GLOBAL & MOBILE FIXES CSS ================= */
+        * { box-sizing: border-box; } /* Mobile par screen cut hone se bachane ke liye */
+        html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; font-family: 'Poppins', sans-serif; background: #0f172a; }
+        
+        .view-section { display: none; min-height: 100vh; width: 100%; padding: 60px 15px 20px 15px; } /* Padding adjusted for mobile */
         
         #homeMenu { display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); color: white; text-align: center; padding: 20px; }
         #homeMenu .logo-icon { font-size: 60px; color: #fbbf24; margin-bottom: 15px; text-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
-        #homeMenu h1 { font-size: 2.5em; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-weight: 700; letter-spacing: 1px;}
-        #homeMenu p { font-size: 1.1em; margin-bottom: 20px; color: #94a3b8; }
+        #homeMenu h1 { font-size: 2.2em; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-weight: 700; letter-spacing: 1px;}
+        #homeMenu p { font-size: 1em; margin-bottom: 20px; color: #94a3b8; }
         
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 900px; width: 100%; }
-        .menu-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 30px 20px; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-width: 900px; width: 100%; }
+        .menu-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 25px 15px; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .menu-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.1); border-color: #38bdf8; box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2); }
         .menu-card i { font-size: 40px; margin-bottom: 15px; }
         .menu-card.scoring i { color: #38bdf8; } .menu-card.player i { color: #4ade80; } .menu-card.owner i { color: #fbbf24; } .menu-card.team i { color: #f97316; } .menu-card.tourney i { color: #8b5cf6; } .menu-card.scheme i { color: #ec4899; }
-        .menu-card h3 { font-size: 1.3em; margin-bottom: 5px; color: #fff; }
-        .menu-card span { font-size: 0.9em; color: #94a3b8; text-align: center;}
+        .menu-card h3 { font-size: 1.2em; margin-bottom: 5px; color: #fff; }
+        .menu-card span { font-size: 0.85em; color: #94a3b8; text-align: center;}
 
         @keyframes livePulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.15); opacity: 0.7; text-shadow: 0 0 15px #ef4444; } 100% { transform: scale(1); opacity: 1; } }
         .menu-card.live-match i { color: #ef4444; animation: livePulse 1.5s infinite; }
         .menu-card.live-match { border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.05);}
         .menu-card.live-match:hover { border-color: #ef4444; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.1);}
 
-        .back-btn-container { width: 100%; padding: 15px 20px; text-align: left; position: absolute; top: 0; left: 0; z-index: 100;}
+        .back-btn-container { width: 100%; padding: 15px; text-align: left; position: absolute; top: 0; left: 0; z-index: 100;}
         .back-btn { background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px 15px; font-weight: 500; border-radius: 5px; cursor: pointer; backdrop-filter: blur(5px); display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 14px;}
         .back-btn:hover { background: #dc2626; border-color: #dc2626; }
 
+        /* GLOBAL ANIMATION OVERLAY */
+        #animOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 99999; flex-direction: column; }
+        .anim-text { font-size: 5em; font-weight: 900; color: white; text-shadow: 2px 2px 10px #000; animation: popAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; text-align: center;}
+        @keyframes popAnim { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
         /* ================= REGISTRATION CSS ================= */
-        #playerRegView { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); justify-content: center; align-items: center; padding: 60px 20px 20px 20px; }
-        #ownerRegView { background: linear-gradient(135deg, #121212 0%, #2c2c2c 100%); justify-content: center; align-items: center; padding: 60px 20px 20px 20px; }
-        #teamRegView { background: linear-gradient(135deg, #e65c00 0%, #F9D423 100%); justify-content: center; align-items: center; padding: 60px 20px 20px 20px; }
-        .registration-card, .vip-card, .village-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 30px; width: 100%; max-width: 500px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); margin: 0 auto; color: #fff; box-sizing: border-box;}
+        #playerRegView { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); justify-content: center; align-items: center; }
+        #ownerRegView { background: linear-gradient(135deg, #121212 0%, #2c2c2c 100%); justify-content: center; align-items: center; }
+        #teamRegView { background: linear-gradient(135deg, #e65c00 0%, #F9D423 100%); justify-content: center; align-items: center; }
+        .registration-card, .vip-card, .village-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 25px; width: 100%; max-width: 500px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); margin: 0 auto; color: #fff;}
         .vip-card { background: rgba(20, 20, 20, 0.85); border-color: #d4af37; max-width: 550px;}
         .village-card { background: #ffffff; color: #333; border-top: 8px solid #e65c00; max-width: 650px;}
         .header { text-align: center; margin-bottom: 25px; }
-        .header h2 { font-size: 24px; font-weight: 600; letter-spacing: 1px; }
-        .header p { font-size: 14px; margin-top: 5px; }
-        .input-group { margin-bottom: 20px; position: relative; }
+        .header h2 { font-size: 22px; font-weight: 600; letter-spacing: 1px; margin-bottom:5px;}
+        .header p { font-size: 13px; margin-top: 0; }
+        .input-group { margin-bottom: 15px; position: relative; }
         .input-group i { position: absolute; left: 15px; top: 40px; font-size:16px;}
-        label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; }
-        input, select, textarea { width: 100%; padding: 12px 12px 12px 40px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: inherit; font-size: 15px; transition: all 0.3s; box-sizing: border-box;}
+        label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 500; }
+        input, select, textarea { width: 100%; padding: 12px 12px 12px 40px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: inherit; font-size: 14px; transition: all 0.3s;}
         input:focus, select:focus, textarea:focus { outline: none; border-color: #4facfe; }
-        .submit-btn { width: 100%; padding: 15px; border: none; border-radius: 8px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.2s; margin-top: 10px; box-sizing:border-box;}
+        .submit-btn { width: 100%; padding: 15px; border: none; border-radius: 8px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.2s; margin-top: 10px;}
         #playerRegView .submit-btn { background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%); }
         #ownerRegView .submit-btn { background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c); color: #121212; }
         #teamRegView .submit-btn { background: #e65c00; }
@@ -65,109 +72,100 @@
         .msg-error { color: #e74c3c; background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c;}
 
         /* ================= TOURNAMENT HUB CSS ================= */
-        #tournamentHubView { background: #f8fafc; color: #1e293b; padding: 60px 20px 20px 20px; }
-        .tourney-container { max-width: 1000px; margin: 0 auto; }
-        .tourney-header { text-align: center; color: #4338ca; margin-bottom: 20px; font-size: 1.8em; }
-        .points-table-wrapper { background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); padding: 20px; margin-bottom: 20px; overflow-x: auto; }
-        .tourney-table { width: 100%; border-collapse: collapse; text-align: center; min-width: 600px; }
-        .tourney-table th { background: #4338ca; color: white; padding: 12px; font-weight: 600; text-transform: uppercase; font-size: 0.9em; }
-        .tourney-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; font-weight: 500; font-size: 0.9em; }
+        #tournamentHubView { background: #f8fafc; color: #1e293b; }
+        .tourney-container { max-width: 1000px; margin: 0 auto; width: 100%; }
+        .tourney-header { text-align: center; color: #4338ca; margin-bottom: 20px; font-size: 1.6em; }
+        .points-table-wrapper { background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); padding: 15px; margin-bottom: 20px; overflow-x: auto; }
+        .tourney-table { width: 100%; border-collapse: collapse; text-align: center; min-width: 500px; }
+        .tourney-table th { background: #4338ca; color: white; padding: 10px; font-weight: 600; text-transform: uppercase; font-size: 0.85em; }
+        .tourney-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; font-weight: 500; font-size: 0.85em; }
         .tourney-table tr:hover { background: #f1f5f9; }
         .group-title { background: #e0e7ff; color: #4338ca; font-weight: bold; padding: 10px; border-radius: 5px; margin-top: 15px;}
-        .add-team-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; gap: 10px; flex-wrap: wrap; align-items: center;}
-        .add-team-box input, .add-team-box select { padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; color: #1e293b; flex: 1; min-width: 150px; background:#fff; box-sizing: border-box;}
-        .add-team-box button { background: #4338ca; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; flex: 1; min-width: 150px;}
+        .add-team-box { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; gap: 10px; flex-wrap: wrap; align-items: center;}
+        .add-team-box input, .add-team-box select { padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; color: #1e293b; flex: 1; min-width: 140px; background:#fff; }
+        .add-team-box button { background: #4338ca; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; flex: 1; min-width: 140px;}
 
         /* ================= SCHEME MATCH CSS ================= */
-        #schemeSetupView, #schemeScoringView { background: #111827; color: white; padding: 60px 20px 20px 20px; }
-        .scheme-container { max-width: 800px; margin: 0 auto; }
-        .scheme-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-        .scheme-card h3 { color: #ec4899; text-align: center; border-bottom: 1px solid rgba(236,72,153,0.3); padding-bottom: 10px; margin-top: 0;}
-        .scheme-input-row { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;}
-        .scheme-input-row div { flex: 1; min-width: 200px;}
-        .scheme-card label { color: #9ca3af; font-size: 0.9em; display:block; margin-bottom:5px; }
-        .scheme-card input, .scheme-card select { background: rgba(0,0,0,0.3); border: 1px solid #4b5563; color: white; padding: 10px; width: 100%; border-radius: 5px; box-sizing:border-box;}
-        .scheme-btn { width: 100%; background: linear-gradient(to right, #ec4899, #8b5cf6); border: none; padding: 15px; color: white; font-weight: bold; font-size: 1.2em; border-radius: 8px; cursor: pointer; margin-top: 10px;}
+        #schemeSetupView, #schemeScoringView { background: #111827; color: white; }
+        .scheme-container { max-width: 800px; margin: 0 auto; width: 100%; }
+        .scheme-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        .scheme-card h3 { color: #ec4899; text-align: center; border-bottom: 1px solid rgba(236,72,153,0.3); padding-bottom: 8px; margin-top: 0; font-size:1.2em;}
+        .scheme-input-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;}
+        .scheme-input-row div { flex: 1; min-width: 150px;}
+        .scheme-card label { color: #9ca3af; font-size: 0.85em; display:block; margin-bottom:4px; }
+        .scheme-card input, .scheme-card select { background: rgba(0,0,0,0.3); border: 1px solid #4b5563; color: white; padding: 10px; width: 100%; border-radius: 5px;}
+        .scheme-btn { width: 100%; background: linear-gradient(to right, #ec4899, #8b5cf6); border: none; padding: 15px; color: white; font-weight: bold; font-size: 1.1em; border-radius: 8px; cursor: pointer; margin-top: 10px;}
         
-        .radio-group { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
-        .radio-group label { display: flex; align-items: center; gap: 8px; font-size: 0.95em; color: #fff; cursor: pointer; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border: 1px solid #4b5563; flex: 1; justify-content: center;}
+        .radio-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .radio-group label { display: flex; align-items: center; gap: 6px; font-size: 0.9em; color: #fff; cursor: pointer; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border: 1px solid #4b5563; flex: 1; justify-content: center;}
         .radio-group input[type="radio"] { width: auto; margin: 0; }
 
         /* Scheme Scoring Specifics */
-        .ss-score-board { text-align: center; background: rgba(0,0,0,0.4); border: 2px solid #ec4899; border-radius: 15px; padding: 20px; margin-bottom: 20px; }
-        .ss-team-name { font-size: 1.5em; color: #f3f4f6; font-weight: bold; }
-        .ss-score { font-size: 3.5em; font-weight: 900; color: #ec4899; margin: 5px 0; text-shadow: 0 0 15px rgba(236,72,153,0.5);}
-        .ss-target-box { background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 1.2em; margin-bottom: 15px; text-align: center; display: none;}
-        .ss-stats-row { display: flex; flex-wrap: wrap; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); gap: 10px;}
+        .ss-score-board { text-align: center; background: rgba(0,0,0,0.4); border: 2px solid #ec4899; border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .ss-team-name { font-size: 1.3em; color: #f3f4f6; font-weight: bold; }
+        .ss-score { font-size: 3em; font-weight: 900; color: #ec4899; margin: 5px 0; text-shadow: 0 0 15px rgba(236,72,153,0.5);}
+        .ss-target-box { background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #10b981; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 1.1em; margin-bottom: 15px; text-align: center; display: none;}
+        .ss-stats-row { display: flex; flex-wrap: wrap; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); gap: 10px;}
         .ss-player-stat { flex: 1; text-align: center; min-width: 120px; }
-        .ss-player-stat h4 { color: #9ca3af; margin: 0 0 5px 0; font-size: 0.85em; text-transform: uppercase;}
-        .ss-player-stat p { font-size: 1.2em; margin: 0; font-weight: bold; color: white;}
-        .ss-buttons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
-        .ss-btn { padding: 18px 10px; font-size: 1.3em; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; transition: 0.2s; color: white; box-sizing: border-box;}
+        .ss-player-stat h4 { color: #9ca3af; margin: 0 0 5px 0; font-size: 0.8em; text-transform: uppercase;}
+        .ss-player-stat p { font-size: 1.1em; margin: 0; font-weight: bold; color: white;}
+        .ss-buttons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+        .ss-btn { padding: 15px 10px; font-size: 1.2em; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; color: white;}
         .ss-btn:active { transform: scale(0.95); }
         .ss-btn-dot { background: #4b5563; } .ss-btn-4 { background: #3b82f6; } .ss-btn-6 { background: #8b5cf6; } .ss-btn-out { background: #ef4444; }
-        .ss-btn-extra { background: #f59e0b; padding: 12px; font-size: 1.1em;}
+        .ss-btn-extra { background: #f59e0b; padding: 10px; font-size: 1em;}
         
         /* ================= PREMIUM SCOREBOARD STYLES ================= */
-        .fsb-title { color: #05445E; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; font-size: 1.4em;}
-        .fsb-inning-card { background: linear-gradient(145deg, #ffffff, #f0f4f8); padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border: 1px solid #e1e8ed; }
-        .fsb-inning-title { margin: 0 0 12px 0; color: #189AB4; font-size: 1.2em; font-weight: 700; border-bottom: 2px solid #75E6DA; padding-bottom: 8px;}
-        .fsb-table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 15px; color: #222; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); min-width: 450px;}
-        .fsb-table th { background: #05445E; color: white; padding: 10px 5px; font-weight: 600; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px;}
-        .fsb-table td { padding: 8px 5px; border-bottom: 1px solid #eee; font-size: 0.9em;}
+        .fsb-title { color: #05445E; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; font-size: 1.3em;}
+        .fsb-inning-card { background: linear-gradient(145deg, #ffffff, #f0f4f8); padding: 12px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border: 1px solid #e1e8ed; }
+        .fsb-inning-title { margin: 0 0 10px 0; color: #189AB4; font-size: 1.1em; font-weight: 700; border-bottom: 2px solid #75E6DA; padding-bottom: 6px;}
+        .fsb-table { width: 100%; border-collapse: collapse; text-align: center; margin-bottom: 10px; color: #222; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); min-width: 400px;}
+        .fsb-table th { background: #05445E; color: white; padding: 8px 4px; font-weight: 600; text-transform: uppercase; font-size: 0.8em; letter-spacing: 0.5px;}
+        .fsb-table td { padding: 6px 4px; border-bottom: 1px solid #eee; font-size: 0.85em;}
         .fsb-table tbody tr:hover { background: #f8fafc; }
-        .fsb-bowl-title { margin: 15px 0 10px 0; color: #d35400; font-size: 1.05em; font-weight: 700; text-transform: uppercase;}
+        .fsb-bowl-title { margin: 10px 0 8px 0; color: #d35400; font-size: 1em; font-weight: 700; text-transform: uppercase;}
         .fsb-bowl-header th { background: #d35400; }
 
         /* ================= SCORING APP CSS ================= */
-        #scoringView { background: #f0f4f8; color: #222; padding: 60px 20px 20px 20px; }
-        .scoring-container { max-width: 900px; margin: 0 auto; }
+        #scoringView { background: #f0f4f8; color: #222; }
+        .scoring-container { max-width: 900px; margin: 0 auto; width:100%; }
         #scoringView h1, #scoringView h2, #scoringView h3 { text-align: center; color: #05445E; }
-        #scoringView label { display: block; margin: 0.4em 0 0.2em 0; font-weight: 600; color: #189AB4; font-size: 0.95em;}
-        #scoringView input[type="text"], #scoringView input[type="number"], #scoringView textarea, #scoringView select { width: 100%; padding: 10px; font-size: 15px; border: 2px solid #75E6DA; border-radius: 5px; background: #fff; box-sizing: border-box;}
-        #scoringView button { background: #189AB4; color: white; border: none; padding: 12px 15px; margin: 5px 2px; font-weight: 600; font-size: 1em; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 7px rgba(24, 154, 180, 0.4); }
+        #scoringView label { display: block; margin: 0.4em 0 0.2em 0; font-weight: 600; color: #189AB4; font-size: 0.9em;}
+        #scoringView input[type="text"], #scoringView input[type="number"], #scoringView textarea, #scoringView select { width: 100%; padding: 10px; font-size: 14px; border: 2px solid #75E6DA; border-radius: 5px; background: #fff; }
+        #scoringView button { background: #189AB4; color: white; border: none; padding: 10px 12px; margin: 4px 2px; font-weight: 600; font-size: 0.95em; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 7px rgba(24, 154, 180, 0.4); }
         #scoringView button:disabled { background: #c0d9df; cursor: not-allowed; box-shadow: none; transform: none; }
-        .flex-row { display: flex; gap: 1em; flex-wrap: wrap; justify-content: space-between; }
-        .flex50 { flex: 1 1 100%; min-width: 250px;}
-        .section { background: white; border-radius: 10px; padding: 15px; margin-top: 20px; box-shadow: 0 5px 12px rgba(0,0,0,0.1); }
+        .flex-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: space-between; }
+        .flex50 { flex: 1 1 100%; min-width: 250px;} /* Mobile first setup */
+        .section { background: white; border-radius: 10px; padding: 15px; margin-top: 15px; box-shadow: 0 5px 12px rgba(0,0,0,0.1); }
         .table-responsive { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
-        #scoringView table { width: 100%; border-collapse: collapse; margin-top: 0.8em; text-align: center; min-width: 500px; font-size: 0.85em;}
-        #scoringView th, #scoringView td { border: 1px solid #ddd; padding: 8px 5px; }
+        #scoringView table { width: 100%; border-collapse: collapse; margin-top: 0.8em; text-align: center; min-width: 450px; font-size: 0.85em;}
+        #scoringView th, #scoringView td { border: 1px solid #ddd; padding: 6px 4px; }
         #scoringView th { background: #189AB4; color: white; }
         .highlight { background: #d0f0fd; border-left: 4px solid #05445E; font-weight: bold;}
-        .score-summary { font-size: 1.4em; margin: 15px 0; font-weight: 700; color: #05445E; text-align: center; background: #e0f7fa; padding: 12px 5px; border-radius: 8px;}
-        #targetDiv { font-size: 1.2em; color: #D72631; text-align: center; font-weight: bold; margin-bottom: 10px;}
-        #resultText { font-size: 1.3em; font-weight: 800; text-align: center; color: #fff; background: #0B6623; margin-top: 15px; padding: 15px; border-radius: 10px; display:none;}
-        .strike-label { font-weight: 700; color: #189AB4; font-size: 0.95em;}
-        .swap-btn { background: #75E6DA; color: #05445E; font-size: 0.85em; padding: 6px 10px; }
+        .score-summary { font-size: 1.3em; margin: 15px 0; font-weight: 700; color: #05445E; text-align: center; background: #e0f7fa; padding: 12px 5px; border-radius: 8px;}
+        #targetDiv { font-size: 1.1em; color: #D72631; text-align: center; font-weight: bold; margin-bottom: 10px;}
+        #resultText { font-size: 1.2em; font-weight: 800; text-align: center; color: #fff; background: #0B6623; margin-top: 15px; padding: 15px; border-radius: 10px; display:none;}
+        .strike-label { font-weight: 700; color: #189AB4; font-size: 0.9em;}
+        .swap-btn { background: #75E6DA; color: #05445E; font-size: 0.8em; padding: 5px 8px; }
         .edit-btn { font-size: 0.75em; padding: 4px 8px; margin-left: 5px; background: #f39c12; color: white; border-radius: 4px; border:none; cursor:pointer;}
-        #fullScoreboard { background: transparent; padding: 15px 0; border-radius: 10px; margin-top: 20px; display: none;}
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 9999; padding: 10px; box-sizing: border-box;}
+        #fullScoreboard { background: transparent; padding: 15px 0; border-radius: 10px; margin-top: 15px; display: none;}
+        .modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 9999; padding: 15px;}
         .modal-content { background: white; padding: 20px; border-radius: 10px; width: 100%; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .modal-input { margin-bottom: 15px; width: 100%; padding: 10px; font-size: 15px; border: 2px solid #05445E; border-radius: 5px; background: #fff; box-sizing: border-box;}
-        #animOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 10000; flex-direction: column; }
-        .anim-text { font-size: 4em; font-weight: 900; color: white; text-shadow: 2px 2px 10px #000; animation: popAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; text-align: center;}
-        @keyframes popAnim { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        .past-score-table { width: 100%; font-size: 0.8em; margin-top: 10px; display: none; background: #f0f4f8; border-radius: 5px; padding: 10px; overflow-x: auto; box-sizing: border-box;}
-        .motm-box { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #fff; padding: 15px; border-radius: 8px; text-align: center; margin-top: 15px; font-size: 1.1em; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.2); border: 2px solid #fff;}
-        .motm-name { font-size: 1.4em; color: #fff; text-shadow: 1px 1px 2px #000; display: block; margin: 5px 0;}
+        .modal-input { margin-bottom: 15px; width: 100%; padding: 10px; font-size: 15px; border: 2px solid #05445E; border-radius: 5px; background: #fff;}
+        .past-score-table { width: 100%; font-size: 0.8em; margin-top: 10px; display: none; background: #f0f4f8; border-radius: 5px; padding: 10px; overflow-x: auto;}
+        .motm-box { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #fff; padding: 12px; border-radius: 8px; text-align: center; margin-top: 15px; font-size: 1em; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.2); border: 2px solid #fff;}
+        .motm-name { font-size: 1.3em; color: #fff; text-shadow: 1px 1px 2px #000; display: block; margin: 4px 0;}
         .motm-stats { font-size: 0.85em; color: #fff; font-weight: normal;}
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* Tablet aur Desktop adjustments */
         @media (min-width: 768px) {
             .flex50 { flex: 1 1 48%; }
+            #livePlayerStats { flex-direction: row; }
+            #livePlayerStats .flex50:last-child { border-left: 2px solid rgba(0,0,0,0.1); padding-left:10px; border-top:none; padding-top:0; }
         }
-        @media (max-width: 600px) {
-            .view-section { padding: 70px 15px 20px 15px; }
-            #homeMenu { padding: 15px; }
-            #homeMenu h1 { font-size: 2em; }
-            .menu-grid { grid-template-columns: 1fr; gap: 15px;}
-            .ss-score { font-size: 2.8em; }
-            .ss-btn { font-size: 1.1em; padding: 15px 5px; }
-            .ss-btn-extra { font-size: 1em; padding: 10px; }
-            .tourney-header { font-size: 1.4em; }
-            #livePlayerStats { flex-direction: column; gap: 15px; }
-            #livePlayerStats .flex50 { border-left: none; padding-left: 0; border-top: 1px solid #ddd; padding-top: 10px;}
+        @media (max-width: 767px) {
+            #livePlayerStats { flex-direction: column; gap: 10px; }
+            #livePlayerStats .flex50:last-child { border-left: none; padding-left: 0; border-top: 1px solid #ddd; padding-top: 10px;}
         }
 
         @media print {
@@ -175,11 +173,11 @@
             body > * { display: none !important; }
             #scoringView, #tournamentHubView { display: block !important; padding:0;}
             .scoring-container, .tourney-container { max-width: 100%; }
-            .back-btn-container, .add-team-box { display: none !important; }
+            .back-btn-container, .add-team-box, #shareMatchBtn, #ss_shareBtn { display: none !important; }
             #matchSection { display: block !important; }
-            #resultText { display: block !important; background: transparent !important; color: #0B6623 !important; border: 2px solid #0B6623; }
-            #fullScoreboard { display: block !important; position: absolute; left: 0; top: 80px; width: 100%; background: white !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border:none !important;}
-            .score-summary, #targetDiv, #livePlayerStats, #scoringZone, #liveScorecardSection, #downloadPdfBtn, #rematchBtn, #undoBtn, #endOverBtn, #startSecondInningsBtn { display: none !important; }
+            #resultText, #ss_resultText { display: block !important; background: transparent !important; color: #0B6623 !important; border: 2px solid #0B6623; }
+            #fullScoreboard, #ss_fullScoreboard { display: block !important; position: absolute; left: 0; top: 80px; width: 100%; background: white !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border:none !important;}
+            .score-summary, #targetDiv, #livePlayerStats, #scoringZone, #liveScorecardSection, #downloadPdfBtn, #rematchBtn, #undoBtn, #endOverBtn, #startSecondInningsBtn, #ss_scoringZone { display: none !important; }
             h1 { display: block !important; text-align: center; color: #05445E; margin-bottom: 10px; }
             .fsb-inning-card { border: 1px solid #000; box-shadow: none; page-break-inside: avoid; }
         }
@@ -187,12 +185,14 @@
 </head>
 <body>
 
+    <div id="animOverlay"><div class="anim-text" id="animText">OUT!</div></div>
+
     <div id="homeMenu" class="view-section" style="display: flex;">
         <i class="fas fa-trophy logo-icon"></i>
         <h1>Village Premier League</h1>
         <p>Tournament Management Dashboard</p>
 
-        <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 30px; backdrop-filter: blur(10px); max-width: 400px; width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); box-sizing: border-box;">
+        <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 10px; padding: 15px; margin-bottom: 30px; backdrop-filter: blur(10px); max-width: 400px; width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
             <p style="margin: 0 0 5px 0; color: #94a3b8; font-size: 0.95em;"><i class="fas fa-headset"></i> App ki jankari ke liye contact karein:</p>
             <h3 style="margin: 0; color: #38bdf8; font-size: 1.2em; font-weight: 600;">Rashid Hussain</h3>
             <p style="margin: 5px 0 0 0; color: #fff; font-size: 1.1em; letter-spacing: 1px;"><i class="fas fa-phone-alt" style="color: #4ade80;"></i> 9720110030</p>
@@ -297,7 +297,6 @@
     <div id="schemeScoringView" class="view-section">
         <div class="back-btn-container"><button class="back-btn" onclick="openView('homeMenu')" style="background:#ec4899;"><i class="fas fa-arrow-left"></i> Home</button></div>
         <div class="scheme-container" style="max-width: 600px;">
-            <div id="ss_animOverlay"><div class="anim-text" id="ss_animText">Scheme Game</div></div>
 
             <div class="ss-target-box" id="ss_targetDisplay">Target: <span id="ss_targetRuns">0</span> Runs in <span id="ss_targetOvers"></span> Overs</div>
 
@@ -333,8 +332,12 @@
                 <button class="ss-btn" style="width:100%; background:#10b981; margin-bottom:15px;" id="ss_inningBtn" onclick="endSchemeInning()" style="display:none;">Dusri Paari Shuru Karein</button>
             </div>
 
-            <div id="ss_resultText" style="display:none; background:#10b981; padding:15px; border-radius:10px; text-align:center; font-size:1.3em; font-weight:bold; color:white; margin-bottom:20px;"></div>
+            <div id="ss_resultText" style="display:none; background:#10b981; padding:15px; border-radius:10px; text-align:center; font-size:1.3em; font-weight:bold; color:white; margin-bottom:15px;"></div>
             
+            <div id="ss_fullScoreboard"></div>
+            
+            <button id="ss_shareBtn" onclick="shareMatchResult(true)" class="ss-btn" style="display:none; width:100%; background:#2563eb; margin-bottom:10px;">📤 Share Scoreboard</button>
+
             <button class="ss-btn" style="width:100%; background:#4b5563; font-size: 1.1em; padding: 12px;" onclick="undoSchemeLast()">↩ Undo Mistake</button>
         </div>
     </div>
@@ -399,7 +402,6 @@
     <div id="scoringView" class="view-section">
         <div class="back-btn-container"><button class="back-btn" id="adminBackBtn" onclick="openView('homeMenu')" style="background:#05445E;"><i class="fas fa-arrow-left"></i> Home</button></div>
         <div class="scoring-container">
-            <div id="animOverlay"><div class="anim-text" id="animText">Scheme Game</div></div>
             <h1 id="mainTitle">Cricket Scoreboard Pro</h1>
             <section class="section" id="setupSection">
                 <div style="text-align: center; margin-bottom: 20px;">
@@ -430,6 +432,7 @@
 
             <section class="section" id="matchSection" style="display:none;">
                 <div id="viewerHistoryBtnArea" style="display:none; text-align:center; margin-bottom:15px;"><button onclick="toggleHistory()" style="background: #f59e0b; border: none; color: white; font-weight: bold; padding: 10px 20px; border-radius: 8px; width: 100%;">📊 पुराने मैचों का रिकॉर्ड</button><div id="viewerHistoryContainer" style="display:none; margin-top:15px; text-align:left;"></div></div>
+                
                 <div class="score-summary"><span id="displayBatTeam">Team</span>: <span id="totalRuns">0</span>/<span id="totalWickets">0</span> <br><small>Over: <span id="currentOver">0.0</span> / <span id="displayMaxOvers">0</span> | Extras: <span id="extrasTotal">0</span> | <span style="color:#D72631;" class="viewer-crr">CRR: <span id="crrDisplay">0.00</span></span></small></div>
                 <div id="targetDiv" style="display:none;">लक्ष्य (Target): <span id="targetRuns">0</span></div>
 
@@ -439,7 +442,7 @@
                         <div style="margin-bottom: 8px;"><span class="strike-label">🏃 Non-Striker:</span> <span id="nonStrikerName"></span> <button class="edit-btn" onclick="openSelectorModal('changeNonStriker')">बदलें</button></div>
                         <button class="swap-btn" onclick="manualSwitchStrike()" style="margin-top:5px;">Swap Strike ⇄</button>
                     </div>
-                    <div class="flex50" style="border-left: 2px solid rgba(0,0,0,0.1); padding-left:10px;">
+                    <div class="flex50">
                         <label style="margin-top:0;">वर्तमान गेंदबाज:</label>
                         <div style="font-size: 1.2em; font-weight: bold; color: #D72631;" id="liveBowlerNameHighlight"><span id="currentBowlerDisplay"></span> <button class="edit-btn" onclick="openSelectorModal('nextBowler')">बदलें</button></div>
                         <div style="font-size: 0.9em; color: #05445E; margin-top: 5px;">स्पेल: <span id="liveBowlerSpell">0.0-0-0</span> | E/R: <span id="liveBowlerEco">0.00</span></div>
@@ -463,7 +466,12 @@
                 </section>
 
                 <div id="resultText"></div><div id="motmContainer"></div><div id="fullScoreboard"></div>
-                <button id="downloadPdfBtn" onclick="downloadScoreboardPDF()" style="display:none; width:100%; background:#d35400; margin-top:20px;">📄 PDF Print</button>
+                
+                <div style="display:flex; gap:10px;">
+                    <button id="downloadPdfBtn" onclick="downloadScoreboardPDF()" style="display:none; flex:1; background:#d35400; margin-top:20px;">📄 PDF Print</button>
+                    <button id="shareMatchBtn" onclick="shareMatchResult(false)" style="display:none; flex:1; background:#2563eb; margin-top:20px;">📤 Share Score</button>
+                </div>
+
                 <button id="rematchBtn" onclick="startNewMatchClear()" style="display:none; width:100%; background:#05445E; margin-top:10px;">🔄 New Match</button>
             </section>
 
@@ -498,7 +506,7 @@
             const style = document.createElement('style');
             style.innerHTML = `
                 body { background: #0f172a !important; color: white !important; }
-                #scoringZone, #setupSection, #undoBtn, .edit-btn, .swap-btn, #endOverBtn, #startSecondInningsBtn, #rematchBtn, .back-btn-container, #homeMenu, #ss_scoringZone, #schemeSetupView { display: none !important; }
+                #scoringZone, #setupSection, #undoBtn, .edit-btn, .swap-btn, #endOverBtn, #startSecondInningsBtn, #rematchBtn, .back-btn-container, #homeMenu, #ss_scoringZone, #schemeSetupView, #shareMatchBtn, #ss_shareBtn { display: none !important; }
                 #scoringView { display: block !important; padding: 20px 10px; background: transparent; }
                 #matchSection { display: block !important; margin-top: 10px; }
                 #viewerHistoryBtnArea { display: block !important; }
@@ -549,13 +557,14 @@
                         let cR = cBat.runs; let cW = cBat.wkts;
                         if(prevRuns !== -1 && prevBatTeam === cBat.name && !sMatch.isComplete) {
                             let diff = cR - prevRuns;
-                            if(diff === 4) ss_anim("FOUR!", "#3b82f6"); 
-                            if(diff === 6) ss_anim("SIX!", "#8b5cf6"); 
-                            if(cW > prevWickets) ss_anim("WICKET", "#ef4444");
+                            if(diff === 4) triggerAnim(4); 
+                            if(diff === 6) triggerAnim(6); 
+                            if(cW > prevWickets) triggerAnim('W');
                         }
                         prevRuns = cR; prevWickets = cW; prevBatTeam = cBat.name;
 
                         updateSchemeUI(true);
+                        if(sMatch.isComplete) finishSchemeMatch("Match Completed"); 
                     } else {
                         document.getElementById('schemeScoringView').style.display = 'none';
                         document.getElementById('scoringView').style.display = 'block';
@@ -587,6 +596,16 @@
             target.style.display = (viewId === 'homeMenu') ? 'flex' : 'block';
             if(viewId !== 'homeMenu' && viewId !== 'scoringView' && viewId !== 'tournamentHubView' && viewId !== 'schemeSetupView' && viewId !== 'schemeScoringView') target.style.display = 'flex';
             window.scrollTo(0, 0);
+        }
+
+        // --- GLOBAL ANIMATION ---
+        function triggerAnim(type) {
+            const overlay = document.getElementById('animOverlay'); const text = document.getElementById('animText');
+            if(type === 'W') { text.textContent = "OUT!"; text.style.color = "#D72631"; overlay.style.background = "rgba(215, 38, 49, 0.7)"; } 
+            else if(type === 4) { text.textContent = "FOUR!"; text.style.color = "#75E6DA"; overlay.style.background = "rgba(5, 68, 94, 0.8)"; } 
+            else if(type === 6) { text.textContent = "SIX!"; text.style.color = "#f39c12"; overlay.style.background = "rgba(11, 102, 35, 0.8)"; }
+            else { text.textContent = type; text.style.color = "#f59e0b"; overlay.style.background = "rgba(0, 0, 0, 0.8)"; } // Wides/NB
+            overlay.style.display = 'flex'; setTimeout(() => { overlay.style.display = 'none'; }, 1200);
         }
 
         // --- WEB3FORMS SETUP ---
@@ -695,7 +714,23 @@
         }
 
         // ==========================================
-        // SCHEME MATCH LOGIC (0 Runs on Extras)
+        // SHARE RESULT LOGIC
+        // ==========================================
+        function shareMatchResult(isScheme) {
+            let resText = isScheme ? document.getElementById('ss_resultText').innerText : document.getElementById('resultText').innerText;
+            if(navigator.share) {
+                navigator.share({
+                    title: 'Village Premier League Match Result',
+                    text: `🏏 *VPL Match Result* 🏏\n\n${resText}\n\n🏆 Download VPL App to see full scoreboard!`,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                alert("Aapka browser Share feature support nahi karta. Kripya screenshot lein.");
+            }
+        }
+
+        // ==========================================
+        // SCHEME MATCH LOGIC (0 Runs on Extras, Animations)
         // ==========================================
         let sMatch = { innings: 1, target: 0, isComplete: false };
         let sState = []; 
@@ -727,8 +762,8 @@
                 if(!fixTgt) return alert("Kripya Fixed Target Run dalein!");
                 sMatch = {
                     innings: 2, target: fixTgt, maxOvers: tOvs, maxWickets: tWkts, isComplete: false, mode: '1in',
-                    t1: { name: "Target Setter", bat: "-", bowl: t2Bowl, runs: fixTgt-1, wkts: 0, balls: tOvs*6 },
-                    t2: { name: t2Name, bat: t2Bat, bowl: t2Bowl, runs: 0, wkts: 0, balls: 0 }
+                    t1: { name: "Target Setter", bat: "-", bowl: t2Bowl, runs: fixTgt-1, wkts: 0, balls: tOvs*6, fours: 0, sixes: 0 },
+                    t2: { name: t2Name, bat: t2Bat, bowl: t2Bowl, runs: 0, wkts: 0, balls: 0, fours: 0, sixes: 0 }
                 };
             } else {
                 let t1Name = document.getElementById('ss_t1_name').value || 'Team A';
@@ -736,8 +771,8 @@
                 let t1Bowl = document.getElementById('ss_t1_bowl').value || 'T2 Bowler';
                 sMatch = {
                     innings: 1, target: 0, maxOvers: tOvs, maxWickets: tWkts, isComplete: false, mode: '2in',
-                    t1: { name: t1Name, bat: t1Bat, bowl: t1Bowl, runs: 0, wkts: 0, balls: 0 },
-                    t2: { name: t2Name, bat: t2Bat, bowl: t2Bowl, runs: 0, wkts: 0, balls: 0 }
+                    t1: { name: t1Name, bat: t1Bat, bowl: t1Bowl, runs: 0, wkts: 0, balls: 0, fours: 0, sixes: 0 },
+                    t2: { name: t2Name, bat: t2Bat, bowl: t2Bowl, runs: 0, wkts: 0, balls: 0, fours: 0, sixes: 0 }
                 };
             }
             sState = [];
@@ -751,6 +786,8 @@
                 sMatch = sState.pop();
                 document.getElementById('ss_scoringZone').style.display = 'block';
                 document.getElementById('ss_resultText').style.display = 'none';
+                document.getElementById('ss_fullScoreboard').style.display = 'none';
+                document.getElementById('ss_shareBtn').style.display = 'none';
                 updateSchemeUI();
             }
         }
@@ -781,7 +818,7 @@
             if(sMatch.innings === 1 && (ovComplete || wktComplete)) document.getElementById('ss_inningBtn').style.display = 'block';
             else document.getElementById('ss_inningBtn').style.display = 'none';
 
-            if(sMatch.innings === 2) {
+            if(sMatch.innings === 2 && !sMatch.isComplete) {
                 if(curT.runs >= sMatch.target) finishSchemeMatch(curT.name + " WON!");
                 else if(ovComplete || wktComplete) {
                     if(curT.runs == sMatch.target - 1) finishSchemeMatch("Match Tied!");
@@ -791,16 +828,16 @@
             if(!isFromFb) saveSchemeLiveMatch();
         }
 
-        function ss_anim(txt, color) {
-            let overlay = document.getElementById('ss_animOverlay'); let t = document.getElementById('ss_animText');
-            t.textContent = txt; t.style.color = color; overlay.style.display = 'flex'; setTimeout(() => { overlay.style.display = 'none'; }, 1000);
-        }
-
         function handleSchemeBall(val) {
             let curT = sMatch.innings === 1 ? sMatch.t1 : sMatch.t2;
             if(Math.floor(curT.balls/6) >= sMatch.maxOvers || curT.wkts >= sMatch.maxWickets || sMatch.isComplete) return;
             saveSchemeState(); curT.balls++;
-            if(val === 'W') { curT.wkts++; ss_anim("WICKET", "#ef4444"); } else { curT.runs += val; if(val === 4) ss_anim("FOUR!", "#3b82f6"); if(val === 6) ss_anim("SIX!", "#8b5cf6"); }
+            if(val === 'W') { curT.wkts++; triggerAnim('W'); } 
+            else { 
+                curT.runs += val; 
+                if(val === 4) { curT.fours++; triggerAnim(4); } 
+                if(val === 6) { curT.sixes++; triggerAnim(6); } 
+            }
             updateSchemeUI();
         }
 
@@ -809,9 +846,9 @@
             if(Math.floor(curT.balls/6) >= sMatch.maxOvers || curT.wkts >= sMatch.maxWickets || sMatch.isComplete) return;
             
             saveSchemeState(); 
-            // 0 Runs added, Ball does not count (re-bowled), No Free Hit.
+            // 0 Runs added, Ball does not count, No Free Hit.
             curT.runs += 0; 
-            ss_anim(type === 'WD' ? "WIDE" : "NO BALL", "#f59e0b"); 
+            triggerAnim(type === 'WD' ? "WIDE" : "NO BALL"); 
             updateSchemeUI();
         }
 
@@ -826,8 +863,42 @@
             sMatch.isComplete = true; document.getElementById('ss_scoringZone').style.display = 'none';
             let rBox = document.getElementById('ss_resultText'); rBox.style.display = 'block';
             let t1s = sMatch.mode==='1in' ? `Target Setter: ${sMatch.target} Runs` : `T1 (${sMatch.t1.name}): ${sMatch.t1.runs}/${sMatch.t1.wkts}`;
-            rBox.innerHTML = `🏆 ${result} <br><br> <small style='font-size:0.6em; color:#e5e7eb;'>${t1s} <br> Chaser (${sMatch.t2.name}): ${sMatch.t2.runs}/${sMatch.t2.wkts}</small>`;
-            saveSchemeLiveMatch();
+            rBox.innerHTML = `🏆 ${result} <br><br> <small style='font-size:0.65em; color:#e5e7eb;'>${t1s} <br> Chaser (${sMatch.t2.name}): ${sMatch.t2.runs}/${sMatch.t2.wkts}</small>`;
+            
+            // Generate Scheme Scoreboard & Map to History
+            let fsb = document.getElementById('ss_fullScoreboard');
+            fsb.style.display = "block";
+            let fsbHTML = `<h3 class="fsb-title" style="text-align:center; color:#ec4899;">📊 Scheme Scoreboard 📊</h3>`;
+            
+            let mockTeamsForHistory = { 
+                team1: {name: sMatch.mode==='1in' ? "Target Setter" : sMatch.t1.name, runs: sMatch.t1.runs, wickets: sMatch.t1.wkts, batsmen:[], bowlers:[]}, 
+                team2: {name: sMatch.t2.name, runs: sMatch.t2.runs, wickets: sMatch.t2.wkts, batsmen:[], bowlers:[]} 
+            };
+
+            [sMatch.t1, sMatch.t2].forEach((t, index) => {
+                if(sMatch.mode==='1in' && index===0) return; // Skip detail table for target setter
+                let sr = t.balls > 0 ? ((t.runs / t.balls) * 100).toFixed(1) : "0.0";
+                let ovs = Math.floor(t.balls / 6) + "." + (t.balls % 6);
+                let er = t.balls > 0 ? (t.runs / (t.balls / 6)).toFixed(2) : "0.00";
+
+                fsbHTML += `<div class="fsb-inning-card" style="border-color:rgba(236,72,153,0.4);">
+                    <h4 class="fsb-inning-title" style="color:#ec4899; border-bottom-color:rgba(236,72,153,0.3);">Team ${index+1}: ${t.name} - ${t.runs}/${t.wkts}</h4>
+                    <div class="table-responsive"><table class="fsb-table"><thead><tr style="background:#ec4899;"><th>Batsman</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>S/R</th></tr></thead>
+                    <tbody><tr><td>${t.bat}</td><td>${t.runs}</td><td>${t.balls}</td><td>${t.fours}</td><td>${t.sixes}</td><td>${sr}</td></tr></tbody></table></div>
+                    <h5 class="fsb-bowl-title" style="color:#8b5cf6;">Bowling</h5><div class="table-responsive"><table class="fsb-table"><thead><tr style="background:#8b5cf6;"><th>Bowler</th><th>Ov</th><th>R</th><th>W</th><th>E/R</th></tr></thead>
+                    <tbody><tr><td>${t.bowl}</td><td>${ovs}</td><td>${t.runs}</td><td>${t.wkts}</td><td>${er}</td></tr></tbody></table></div></div>`;
+
+                let mockT = index===0 ? mockTeamsForHistory.team1 : mockTeamsForHistory.team2;
+                mockT.batsmen.push({name: t.bat, runs: t.runs, balls: t.balls, fours: t.fours, sixes: t.sixes, status: 'Done'});
+                mockT.bowlers.push({name: t.bowl, balls: t.balls, runs: t.runs, wickets: t.wkts});
+            });
+            fsb.innerHTML = fsbHTML;
+            document.getElementById('ss_shareBtn').style.display = 'block';
+
+            if(!isViewer) {
+                saveMatchHistory(result, "Scheme Match", mockTeamsForHistory);
+                saveSchemeLiveMatch();
+            }
         }
 
         // ==========================================
@@ -904,14 +975,6 @@
             document.getElementById('displayMaxOvers').textContent = match.maxOvers; updateUI();
         }
 
-        function triggerAnim(type) {
-            const overlay = document.getElementById('animOverlay'); const text = document.getElementById('animText');
-            if(type === 'W') { text.textContent = "OUT!"; text.style.color = "#D72631"; overlay.style.background = "rgba(215, 38, 49, 0.7)"; } 
-            else if(type === 4) { text.textContent = "FOUR!"; text.style.color = "#75E6DA"; overlay.style.background = "rgba(5, 68, 94, 0.8)"; } 
-            else if(type === 6) { text.textContent = "SIX!"; text.style.color = "#f39c12"; overlay.style.background = "rgba(11, 102, 35, 0.8)"; }
-            overlay.style.display = 'flex'; setTimeout(() => { overlay.style.display = 'none'; }, 1500);
-        }
-
         function calculateMOTM() {
             let bP = "", mP = -1, pD = "";
             [teams.team1, teams.team2].forEach(team => {
@@ -927,9 +990,10 @@
             if(bP==="") return null; return { name: bP, perf: pD };
         }
 
-        function saveMatchHistory(resTxt, motmTxt) {
+        function saveMatchHistory(resTxt, motmTxt, customData = null) {
             let hist = JSON.parse(localStorage.getItem('cricketMatchHistory')) || [];
-            let record = { date: new Date().toLocaleString('hi-IN'), t1: `${teams.team1.name} - ${teams.team1.runs}/${teams.team1.wickets}`, t2: `${teams.team2.name} - ${teams.team2.runs}/${teams.team2.wickets}`, winner: resTxt, motm: motmTxt, fullData: JSON.parse(JSON.stringify(teams)) };
+            let d = customData || teams;
+            let record = { date: new Date().toLocaleString('hi-IN'), t1: `${d.team1.name} - ${d.team1.runs}/${d.team1.wickets}`, t2: `${d.team2.name} - ${d.team2.runs}/${d.team2.wickets}`, winner: resTxt, motm: motmTxt, fullData: JSON.parse(JSON.stringify(d)) };
             hist.push(record); localStorage.setItem('cricketMatchHistory', JSON.stringify(hist));
             if (typeof isViewer !== 'undefined' && !isViewer && window.db) db.ref('VillagePremierLeague/History').set(hist);
         }
@@ -947,8 +1011,9 @@
                     html += `<div style="border-bottom:1px solid #ddd; padding-bottom:10px; margin-bottom:10px;"><small style="color:#777;">🗓️ ${m.date}</small><br><b>🏏 ${m.t1}</b> <br>⚔️ VS <br><b>🏏 ${m.t2}</b><br><span style="color:#0B6623; font-weight:bold; font-size:1.1em;">${m.winner}</span><br>${mStr}<br><button onclick="document.getElementById('pastScore_${aIdx}').style.display=document.getElementById('pastScore_${aIdx}').style.display==='block'?'none':'block'" style="background:#189AB4; font-size:0.8em; padding:6px; margin-top:8px; border-radius:4px; color:white; border:none;">📊 Pura Scoreboard</button><div id="pastScore_${aIdx}" class="past-score-table">`;
                     if(m.fullData) {
                         [m.fullData.team1, m.fullData.team2].forEach((t, i) => {
+                            if(!t.name) return; // Safety check
                             html += `<h4 style="margin: 15px 0 5px 0; color:${isViewer ? '#fbbf24' : '#05445E'};">Innings ${i+1}: ${t.name} (${t.runs}/${t.wickets})</h4><table style="width:100%; border-collapse:collapse; text-align:center; margin-bottom:5px;"><tr style="background:#189AB4; color:white;"><th>Khiladi</th><th>R</th><th>B</th><th>4s</th><th>6s</th></tr>`;
-                            t.batsmen.forEach(b => { html += `<tr><td>${b.name} <br><small>(${b.status==='Yet to Bat'?'-':(b.status==='out'?'Out':'Not Out')})</small></td><td>${b.runs}</td><td>${b.balls}</td><td>${b.fours}</td><td>${b.sixes}</td></tr>`; });
+                            t.batsmen.forEach(b => { html += `<tr><td>${b.name} <br><small>(${b.status==='Yet to Bat'?'-':(b.status==='out'?'Out':'Not Out')})</small></td><td>${b.runs}</td><td>${b.balls}</td><td>${b.fours||0}</td><td>${b.sixes||0}</td></tr>`; });
                             html += `</table>`;
                             if(t.bowlers) {
                                 html += `<h5 style="margin: 10px 0 5px 0; color:#d35400;">Bowling</h5><table style="width:100%; border-collapse:collapse; text-align:center; margin-bottom:10px;"><tr style="background:#d35400; color:white;"><th>Bowler</th><th>Ov</th><th>R</th><th>W</th></tr>`;
@@ -1006,7 +1071,7 @@
             bT.runs+=r; bw.runs+=r; bw.balls++; match.ballsInOver++;
             if(r%2!==0) switchStr(); chkStat(); if(!match.matchFinished) updateUI();
         }
-        function handleExtra(type) { if(match.isComplete||match.matchFinished) return; saveS(); teams[match.battingTeam].runs++; teams[match.battingTeam].extras++; getBowlRef().runs++; chkStat(); if(!match.matchFinished) updateUI(); }
+        function handleExtra(type) { if(match.isComplete||match.matchFinished) return; saveS(); teams[match.battingTeam].runs++; teams[match.battingTeam].extras++; getBowlRef().runs++; triggerAnim(type === 'W' ? 'WIDE' : 'NO BALL'); chkStat(); if(!match.matchFinished) updateUI(); }
         function handleByeLegBye() {
             if(match.isComplete||match.matchFinished) return; let runsStr = prompt("Byes/Leg Byes runs (1-6):", "1"); if(!runsStr) return;
             let runs = parseInt(runsStr); if(isNaN(runs) || runs<1 || runs>6) return alert("Galat input!");
@@ -1084,6 +1149,8 @@
             });
             fsb.innerHTML = fsbHTML;
 
+            document.getElementById('shareMatchBtn').style.display = 'block';
+
             if(!isViewer) {
                 // Auto Update Points Table!
                 autoUpdatePointsTable(teams.team1.name, t1r, teams.team2.name, t2r);
@@ -1096,7 +1163,7 @@
         }
 
         function disableBtns(dis) { document.querySelectorAll('.ballRunBtn, .extraBtn, #wicketBtn').forEach(b => b.disabled=dis); }
-        function undoLastAction() { if(historyStack.length>0) { let lst=historyStack.pop(); match=lst.match; teams=lst.teams; if(historyStack.length===0) document.getElementById('undoBtn').disabled=true; if(!match.matchFinished){ document.getElementById('resultText').style.display="none"; document.getElementById('motmContainer').innerHTML=""; document.getElementById('fullScoreboard').style.display="none"; document.getElementById('downloadPdfBtn').style.display="none"; document.getElementById('rematchBtn').style.display="none"; document.getElementById('scoringZone').style.display="block"; document.getElementById('liveScorecardSection').style.display="block"; document.getElementById('livePlayerStats').style.display="flex"; document.getElementById('endOverBtn').style.display="inline-block"; } document.getElementById('currentBowlerDisplay').textContent=match.currentBowler; updateUI(); } }
+        function undoLastAction() { if(historyStack.length>0) { let lst=historyStack.pop(); match=lst.match; teams=lst.teams; if(historyStack.length===0) document.getElementById('undoBtn').disabled=true; if(!match.matchFinished){ document.getElementById('resultText').style.display="none"; document.getElementById('motmContainer').innerHTML=""; document.getElementById('fullScoreboard').style.display="none"; document.getElementById('downloadPdfBtn').style.display="none"; document.getElementById('shareMatchBtn').style.display="none"; document.getElementById('rematchBtn').style.display="none"; document.getElementById('scoringZone').style.display="block"; document.getElementById('liveScorecardSection').style.display="block"; document.getElementById('livePlayerStats').style.display="flex"; document.getElementById('endOverBtn').style.display="inline-block"; } document.getElementById('currentBowlerDisplay').textContent=match.currentBowler; updateUI(); } }
         function downloadScoreboardPDF() { window.print(); }
 
         document.getElementById('setupMatchBtn').onclick = setupMatch;
