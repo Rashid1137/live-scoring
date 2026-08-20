@@ -321,6 +321,12 @@
                 </div>
             </div>
 
+            <!-- Scheduled Scheme Matches for Admin -->
+            <div id="schScheduledMatchesContainer" style="display:none; margin-bottom: 20px;">
+                <h3 style="color:#ec4899; text-align:center;">📅 निर्धारित स्कीम मैच (Scheduled)</h3>
+                <div id="schScheduledMatchesList"></div>
+            </div>
+
             <div class="scheme-card">
                 <h3>Match Rules & Mode</h3>
                 <div class="scheme-input-row">
@@ -451,6 +457,12 @@
                         <button onclick="resumeSavedStandardMatch()" style="background:#189AB4; border:none; padding:10px; color:white; font-weight:bold; border-radius:6px; flex:1; cursor:pointer; box-shadow:none;">▶️ शुरू करें</button>
                         <button onclick="deleteSavedStandardMatch()" style="background:#e74c3c; border:none; padding:10px; color:white; font-weight:bold; border-radius:6px; flex:1; cursor:pointer; box-shadow:none;">🗑️ डिलीट करें</button>
                     </div>
+                </div>
+
+                <!-- Scheduled Standard Matches for Admin -->
+                <div id="stdScheduledMatchesContainer" style="display:none; margin-bottom: 20px;">
+                    <h3 style="color:#05445E; text-align:center;">📅 निर्धारित मैच (Scheduled)</h3>
+                    <div id="stdScheduledMatchesList"></div>
                 </div>
 
                 <button id="showHistoryBtn" onclick="toggleHistory()" style="background:#f39c12; width:100%; margin-bottom: 15px; box-shadow: none;">📊 पिछले मैचों का रिकॉर्ड</button>
@@ -603,7 +615,7 @@
         // ==========================================
         // APP/WEB LINK SETUP FOR SHARING 
         // ==========================================
-        const BASE_WEB_LINK = window.location.href.split('?')[0]; 
+        const BASE_WEB_LINK = 'https://rashid1137.github.io/live-scoring/';
 
         // --- NETWORK / OFFLINE CHECKING ---
         window.addEventListener('offline', () => { document.getElementById('offlineBanner').style.display = 'block'; });
@@ -769,6 +781,28 @@
             alert("✅ मैच डिलीट हो गया!");
         }
 
+        // ==========================================
+        // SHARE UPCOMING MATCH (Replaces Start in Viewer)
+        // ==========================================
+        function shareUpcomingMatch(id) {
+            let m = window.globalUpcomingMatches[id];
+            if(!m) return;
+            
+            let displayDate = m.date;
+            let matchDateObj = new Date(m.date);
+            if(!isNaN(matchDateObj)) displayDate = matchDateObj.toLocaleString('hi-IN', {day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit'});
+
+            let shareTxt = `🏏 *Upcoming Match: Third Umpire VPL* 🏏\n\n`;
+            if(m.type === 'Scheme Match') shareTxt += `⚡ *Scheme Match*\n`;
+            shareTxt += `⚔️ *${m.t1} 🆚 ${m.t2}*\n📅 तारीख: ${displayDate}\n📍 ग्राउंड: ${m.ground}\n\n`;
+            if(m.players && m.players !== "Not Announced") shareTxt += `👥 खिलाड़ी: ${m.players}\n\n`;
+            shareTxt += `📲 *लाइव मैच देखने के लिए लिंक पर क्लिक करें:*\n🔗 ${BASE_WEB_LINK}?mode=viewer`;
+            
+            if(navigator.share) navigator.share({title: 'Upcoming Match', text: shareTxt});
+            else window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTxt), '_blank');
+        }
+
+        // ADMIN: Load Upcoming Match into Setup
         function startLiveFromUpcoming(id) {
             let matchData = window.globalUpcomingMatches[id];
             if(!matchData) return;
@@ -776,7 +810,7 @@
             let inputPin = prompt("इस अपकमिंग मैच को लाइव स्कोरिंग में बदलने के लिए अपना 4-अंकों का पिन डालें:");
             if(inputPin !== matchData.pin) { if(inputPin !== null) alert("❌ गलत पिन!"); return; }
 
-            if(confirm("क्या आप इस मैच को 'Live' शुरू करना चाहते हैं? (यह Upcoming से हटकर Setup में आ जाएगा)")) {
+            if(confirm("क्या आप इस मैच को 'Live' शुरू करना चाहते हैं? (यह मैच अब सेटअप में आ जाएगा)")) {
                 db.ref('VillagePremierLeague/UpcomingMatches/' + id).remove();
                 
                 if(matchData.type === 'Scheme Match') {
@@ -792,15 +826,53 @@
                     if(matchData.schemeTarget && matchData.schemeTarget !== '-') document.getElementById('ss_fixedTarget').value = matchData.schemeTarget;
                     
                     document.getElementById('ss_matchPin').value = matchData.pin;
-                    openView('schemeSetupView');
                     alert("✅ मैच सेटअप में आ गया है! कृपया बाकी डिटेल्स भरें और 'Match Shuru Karein' पर क्लिक करें।");
                 } else {
                     document.getElementById('team1Name').value = matchData.t1;
                     document.getElementById('team2Name').value = matchData.t2;
                     document.getElementById('matchSecurityPin').value = matchData.pin;
-                    openView('scoringView');
                     alert("✅ मैच सेटअप में आ गया है! कृपया प्लेयर्स के नाम और ओपनिंग खिलाड़ी चुनें, फिर 'मैच शुरू करें' पर क्लिक करें।");
                 }
+            }
+        }
+
+        // Admin: Render Scheduled Matches inside Setup Views
+        function renderAdminScheduledMatches(upMatches) {
+            let stdHtml = ''; let schHtml = '';
+            let now = new Date().getTime();
+            let sortedKeys = Object.keys(upMatches).sort((a,b) => upMatches[a].timestamp - upMatches[b].timestamp);
+
+            sortedKeys.forEach(id => {
+                let uM = upMatches[id];
+                let matchTime = new Date(uM.date).getTime();
+                let isReady = (!isNaN(matchTime) && now >= matchTime);
+                let statusBadge = isReady ? `<span style="background:#10b981; color:white; padding:2px 6px; border-radius:4px; font-size:0.8em; margin-left:10px;">Time Over - Ready!</span>` : `<span style="background:#f59e0b; color:white; padding:2px 6px; border-radius:4px; font-size:0.8em; margin-left:10px;">Upcoming</span>`;
+
+                let displayDate = uM.date;
+                if(!isNaN(matchTime)) displayDate = new Date(uM.date).toLocaleString('hi-IN', {day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit'});
+
+                let cardHtml = `<div style="background:rgba(255,255,255,0.8); border:2px solid ${uM.type==='Scheme Match'?'#ec4899':'#189AB4'}; padding:10px; border-radius:8px; margin-bottom:10px; color:#222; text-align:left; position:relative;">
+                    <button onclick="deleteUpcomingMatch('${id}')" style="position:absolute; top:10px; right:10px; background:rgba(231, 76, 60, 0.9); border:none; color:white; padding:4px 8px; border-radius:4px; cursor:pointer;"><i class="fas fa-trash"></i></button>
+                    <h4 style="margin:0 0 5px 0; color:#05445E; padding-right:30px;">${uM.t1} vs ${uM.t2}</h4>
+                    <div style="margin-bottom:5px;">${statusBadge}</div>
+                    <p style="margin:2px 0; font-size:0.85em;">Date: ${displayDate}</p>
+                    <button onclick="startLiveFromUpcoming('${id}')" style="background:${uM.type==='Scheme Match'?'#ec4899':'#189AB4'}; color:white; border:none; padding:8px; border-radius:4px; cursor:pointer; width:100%; margin-top:5px; font-weight:bold; box-shadow:0 4px 6px rgba(0,0,0,0.1);">▶️ ${uM.type==='Scheme Match'?'स्कीम मैच':'स्टैंडर्ड मैच'} सेटअप में लाएं</button>
+                </div>`;
+
+                if(uM.type === 'Scheme Match') schHtml += cardHtml;
+                else stdHtml += cardHtml;
+            });
+
+            let stdCont = document.getElementById('stdScheduledMatchesContainer');
+            if(stdCont && !isViewer) {
+                if(stdHtml !== '') { document.getElementById('stdScheduledMatchesList').innerHTML = stdHtml; stdCont.style.display = 'block'; }
+                else stdCont.style.display = 'none';
+            }
+
+            let schCont = document.getElementById('schScheduledMatchesContainer');
+            if(schCont && !isViewer) {
+                if(schHtml !== '') { document.getElementById('schScheduledMatchesList').innerHTML = schHtml; schCont.style.display = 'block'; }
+                else schCont.style.display = 'none';
             }
         }
 
@@ -810,6 +882,9 @@
             const upMatches = snapshot.val();
             window.globalUpcomingMatches = upMatches || {};
             let html = '';
+            
+            if(!isViewer) renderAdminScheduledMatches(window.globalUpcomingMatches); // For Admin Panel
+
             if(!upMatches) {
                 html = '<div style="text-align:center; padding:20px; color:#94a3b8;">कोई आने वाला मैच सेट नहीं है।</div>';
             } else {
@@ -834,9 +909,9 @@
                     let matchDateObj = new Date(uM.date);
                     let displayDate = isNaN(matchDateObj) ? uM.date : matchDateObj.toLocaleString('hi-IN', {day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit'});
 
+                    // Viewer HTML (Admin buttons removed, Share added)
                     html += `
                     <div class="upcoming-card">
-                        <button onclick="deleteUpcomingMatch('${id}')" style="position:absolute; top:10px; right:10px; background:rgba(231, 76, 60, 0.8); border:none; color:white; padding:5px 10px; border-radius:4px; cursor:pointer; z-index:10;"><i class="fas fa-trash"></i></button>
                         ${imgHtml}
                         <div class="upcoming-type">${uM.type}</div>
                         <h3 class="upcoming-title">${uM.t1} <span style="color:white; font-size:0.8em;">VS</span> ${uM.t2}</h3>
@@ -849,7 +924,7 @@
                             <p><i class="fas fa-map-marker-alt"></i> <strong>ग्राउंड:</strong> ${uM.ground}</p>
                             <p><i class="fas fa-users"></i> <strong>खिलाड़ी:</strong> ${uM.players}</p>
                         </div>
-                        <button onclick="startLiveFromUpcoming('${id}')" style="width:100%; background:linear-gradient(to right, #10b981, #059669); border:none; color:white; padding:10px; border-radius:6px; cursor:pointer; font-weight:bold; margin-top:10px; font-size: 1.1em; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);">▶️ लाइव स्कोरिंग शुरू करें</button>
+                        <button onclick="shareUpcomingMatch('${id}')" style="width:100%; background:linear-gradient(to right, #3b82f6, #2563eb); border:none; color:white; padding:10px; border-radius:6px; cursor:pointer; font-weight:bold; margin-top:10px; font-size: 1.1em; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);"><i class="fas fa-share-alt"></i> Share Match Details</button>
                     </div>`;
                 });
             }
@@ -894,6 +969,19 @@
         // VIEWER MODE LOGIC & CSS OVERRIDES
         // ==========================================
         let activeLiveRef = null;
+        window.globalLiveMatches = {};
+
+        function shareLiveMatchCard(id) {
+            let m = window.globalLiveMatches[id];
+            if(!m) return;
+            let title = m.matchType === 'scheme' ? `⚡ Scheme: ${m.match.t1Name} 🆚 ${m.match.t2Name}` : `🏏 ${m.teams.team1.name} 🆚 ${m.teams.team2.name}`;
+            let score = m.matchType === 'scheme' ? `${m.match.runs}/${m.match.wickets} (${Math.floor(m.match.balls/6)}.${m.match.balls%6} Ov)` : `${m.teams[m.match.battingTeam].runs}/${m.teams[m.match.battingTeam].wickets} (${m.match.oversCompleted}.${m.match.ballsInOver} Ov)`;
+            
+            let txt = `🔴 *LIVE MATCH: Third Umpire VPL* 🔴\n\n${title}\n👉 Current Score: *${score}*\n\n📲 *लाइव स्कोर देखने के लिए लिंक पर क्लिक करें:*\n🔗 ${BASE_WEB_LINK}?mode=viewer`;
+            
+            if(navigator.share) navigator.share({title: 'Live Match', text: txt});
+            else window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(txt), '_blank');
+        }
 
         if(isViewer) {
             document.getElementById('homeMenu').style.display = 'none';
@@ -903,7 +991,9 @@
 
             db.ref('VillagePremierLeague/LiveMatches').on('value', (snapshot) => {
                 const matches = snapshot.val();
+                window.globalLiveMatches = matches || {};
                 let html = '';
+                
                 if(!matches) {
                     html = '<div style="text-align:center; background:rgba(255,255,255,0.05); padding:20px; border-radius:10px; border:1px solid rgba(255,255,255,0.1);"><i class="fas fa-satellite-dish" style="font-size:3em; color:#64748b; margin-bottom:10px;"></i><p style="color:#94a3b8; font-size:1.1em; margin:0;">Is waqt koi live match nahi chal raha hai.</p></div>';
                 } else {
@@ -925,7 +1015,10 @@
                                 <span style="color:#f87171; font-weight:bold; font-size: 1.1em;">${scoreInfo}</span>
                                 <span style="display:block; margin-top:5px; color:#38bdf8;">Tap to view live scoreboard <i class="fas fa-chevron-right"></i></span>
                             </div>
-                            <button onclick="takeoverMatch('${mId}', '${mData.matchType}')" style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.6); border:1px solid #fbbf24; color:#fbbf24; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.85em; font-weight:bold; z-index:10;"><i class="fas fa-lock"></i> Edit</button>
+                            <!-- Admin Edit Button (Top Right) -->
+                            <button onclick="takeoverMatch('${mId}', '${mData.matchType}')" style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.6); border:1px solid #fbbf24; color:#fbbf24; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.8em; font-weight:bold; z-index:10;"><i class="fas fa-lock"></i> Edit</button>
+                            <!-- Share Button (Bottom Right) -->
+                            <button onclick="shareLiveMatchCard('${mId}')" style="position:absolute; bottom:10px; right:10px; background:rgba(37, 99, 235, 0.9); border:none; color:white; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:0.85em; font-weight:bold; z-index:10;"><i class="fas fa-share-alt"></i> Share</button>
                         </div>`;
                     }
                 }
@@ -1616,7 +1709,7 @@
                                  <div id="pastScore_${containerId}_${aIdx}" class="past-score-table" style="display:none; padding:12px; border:1px solid ${isViewer?'rgba(255,255,255,0.2)':'#ec4899'}; border-radius:8px; margin-bottom:20px; background:${isViewer?'rgba(255,255,255,0.05)':'#f8fafc'}; color:${isViewer?'#fff':'#222'}; text-align:center;">
                                     ${generateSchemeScoreboardHTML(m.fullData)}
                                     <div style="margin-top:15px; text-align:center;">
-                                        <button onclick="sharePastMatch(${aIdx})" style="background:#2563eb; color:white; border:none; padding:10px 15px; border-radius:6px; font-size:0.95em; cursor:pointer; width:100%; font-weight:bold;">📤 Share This Match</button>
+                                        <button onclick="sharePastMatch(${aIdx})" style="background:#2563eb; color:white; border:none; padding:10px 15px; border-radius:6px; font-size:0.95em; cursor:pointer; width:100%; font-weight:bold;"><i class="fas fa-share-alt"></i> Share This Match</button>
                                     </div>
                                  </div>`;
                     } else {
@@ -1666,7 +1759,7 @@
                         } else html += "<div style='text-align:center; color:#777; margin: 10px;'>Pura Scoreboard Uplabdh Nahi Hai.</div>";
                         
                         html += `<div style="margin-top:15px; text-align:center;">
-                                    <button onclick="sharePastMatch(${aIdx})" style="background:#2563eb; color:white; border:none; padding:10px 15px; border-radius:6px; font-size:0.95em; cursor:pointer; width:100%; font-weight:bold;">📤 Share This Match</button>
+                                    <button onclick="sharePastMatch(${aIdx})" style="background:#2563eb; color:white; border:none; padding:10px 15px; border-radius:6px; font-size:0.95em; cursor:pointer; width:100%; font-weight:bold;"><i class="fas fa-share-alt"></i> Share This Match</button>
                                  </div></div>`;
                     }
                 });
